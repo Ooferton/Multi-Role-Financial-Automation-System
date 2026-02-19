@@ -13,7 +13,7 @@ torch>=2.10.0
 alpaca-trade-api==3.2.0
 
 # Data
-yfinance==1.2.0
+yfinance==0.2.28
 feedparser==6.0.12
 beautifulsoup4==4.14.3
 requests==2.32.5
