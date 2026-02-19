@@ -30,6 +30,14 @@ class Orchestrator:
         self.registered_agents[agent_instance.name] = agent_instance
         self.logger.info(f"Agent registered: {agent_instance.name}")
 
+    def set_broker(self, broker):
+        """
+        Attach a broker instance to the orchestrator so it can be shared
+        with agents or used for system-wide operations.
+        """
+        self.broker = broker
+        self.logger.info("Broker attached to Orchestrator.")
+
     def allocate_capital(self):
         """
         Determines how much capital each agent is allowed to deploy.

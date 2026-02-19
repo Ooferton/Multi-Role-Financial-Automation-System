@@ -196,7 +196,15 @@ class RLStrategyV2(TradingStrategy):
         trade_fraction = min(abs(action_val), 1.0) * genome.conviction_multiplier
         trade_value = cash * min(trade_fraction, 1.0) * genome.max_position_pct
         quantity = round(trade_value / price, 4) if price > 0 else 0
-        
+
+        # Enforce minimum trade value to avoid tiny orders rejected by brokers
+        min_trade_value = float(self.config.get('min_trade_value', 1.0))
+        if trade_value < min_trade_value:
+            self.logger.warning(
+                f"Skipping tiny order for {tick.symbol}: estimated value ${trade_value:.4f} < min ${min_trade_value:.2f}"
+            )
+            return None
+
         if quantity <= 0:
             return None
         
