@@ -1,0 +1,40 @@
+# Core
+numpy==2.4.2
+pandas==2.3.3
+scipy==1.17.0
+scikit-learn==1.8.0
+
+# RL / ML
+stable_baselines3==2.7.1
+gymnasium==1.2.3
+torch>=2.10.0
+
+# Broker
+alpaca-trade-api==3.2.0
+
+# Data
+yfinance==1.2.0
+feedparser==6.0.12
+beautifulsoup4==4.14.3
+requests==2.32.5
+
+# NLP
+nltk==3.9.2
+textblob==0.19.0
+
+# Dashboard
+streamlit==1.54.0
+plotly==6.5.2
+
+# Infrastructure
+python-dotenv==1.2.1
+PyYAML==6.0.1
+redis==7.2.0
+psycopg2-binary==2.9.11
+
+# Backtesting
+backtrader==1.9.78.123
+
+# Utils
+tqdm==4.67.3
+matplotlib==3.10.8
