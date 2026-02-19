@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 
 from agents.trading_agent import TradingAgent
 from agents.alpaca_broker import AlpacaBroker
-from strategies.rl_strategy import RLStrategy
+from strategies.rl_strategy_v2 import RLStrategyV2
+from core.orchestrator import Orchestrator
 from data.feature_store import FeatureStore, MarketTick
 
 # Setup Logging
@@ -37,18 +38,22 @@ def main():
     # Feature Store (for logging history if needed)
     feature_store = FeatureStore()
     
-    # Agent
-    agent = TradingAgent("Live_RL_Agent", {}, feature_store, broker)
+    # Orchestrator with broker
+    orchestrator = Orchestrator("config/config.yaml")
+    orchestrator.set_broker(broker)
     
-    # Strategy
-    model_path = "production_models/ppo_trading_real_v1"
+    # Agent
+    agent = TradingAgent("Live_RL_Agent_v2", {}, feature_store, broker)
+    
+    # Strategy — PPO Trading Real v2 (10 indicators)
+    model_path = "ml/models/ppo_trading_real_v2"
     
     # Wait for model if not ready
     while not os.path.exists(model_path + ".zip") and not os.path.exists(model_path):
         logger.info("Waiting for model file...")
         time.sleep(10)
 
-    strategy = RLStrategy("RL_Brain", {}, broker, model_path.replace(".zip","")) # SB3 adds .zip automatically usually
+    strategy = RLStrategyV2("RL_Brain_v2", {}, broker, model_path.replace(".zip",""))
     agent.add_strategy(strategy)
     
     target_symbol = "SPY"
