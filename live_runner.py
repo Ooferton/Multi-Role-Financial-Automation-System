@@ -61,7 +61,7 @@ def main():
     hft_strategy = HFTStrategy("HFT_Momentum", {"window_size": 20}, broker)
     agent.add_strategy(hft_strategy)
     
-    target_symbols = ["SPY", "QQQ", "IWM", "TLT", "SHY", "NVDA", "AAPL", "IBM", "MU", "MSFT", "GOOGL", "TSM", "GE", "AMZN", "META","INTC", "AMD",]
+    target_symbols = ["SPY", "QQQ", "IWM", "TLT", "SHY", "NVDA", "AAPL", "IBM", "MU", "MSFT", "GOOGL", "TSM", "GE", "AMZN", "META","INTC", "AMD", "BA", "XOM", "CVX", "JNJ", "PG", "VZ", "DIS", "KO", "MCD", "WMT", "HD", "UNH", "PFE", "MRK", "CSCO", "ORCL", "ADBE", "CRM", "NFLX", "PYPL", "BABA", "V", "MA", "JPM", "BAC", "C", "WFC", "GS", "MS", "AXP", "USB", "CME", "ICE", "SPG", "PLD", "AMT", "CCI", "EQIX", "DLR", "PSA", "VTR", "EXR", "SBAC", "AVB", "EQR", "ESS", "FRT", "KIM", "O", "REG", "UDR"]
     logger.info(f"Starting Multi-Ticker Loop for {target_symbols}...")
     
     try:
