@@ -13,8 +13,8 @@ class AlpacaBroker(BrokerInterface):
     def __init__(self, paper: bool = True):
         self.logger = logging.getLogger(__name__)
         
-        self.api_key = os.getenv("APCA_API_KEY_ID")
-        self.api_secret = os.getenv("APCA_API_SECRET_KEY")
+        self.api_key = os.getenv("PK6AL3MIV5C2K6U4TB5TBNNYRB")
+        self.api_secret = os.getenv("JRQezWf2afBj2GTYhneEisT2Yh2HhetWYtj8F5XwX6P")
         self.base_url = "https://paper-api.alpaca.markets" if paper else "https://api.alpaca.markets"
         
         if not self.api_key or not self.api_secret:
@@ -67,7 +67,7 @@ class AlpacaBroker(BrokerInterface):
                     avg_entry_price=float(p.avg_entry_price),
                     current_price=float(p.current_price),
                     market_value=float(p.market_value),
-                    unrealized_pnl=float(p.unrealized_pl)
+                    unrealized_pl=float(p.unrealized_pl)
                 )
                 positions.append(pos)
             return positions
