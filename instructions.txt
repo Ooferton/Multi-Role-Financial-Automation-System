@@ -3,7 +3,10 @@
 Welcome to your Autonomous Hedge Fund. Follow these steps to get the system up and running.
 
 ## 1. Environment Setup
-The system requires Python 3.10+ (Python 3.12 recommended for GPU acceleration).
+The system requires Python 3.10+ (**Python 3.12 is strongly recommended**). 
+
+> [!WARNING]
+> Avoid using **Python 3.14** or other experimental/pre-release versions. These versions often have compatibility issues with core libraries like NumPy, PyTorch, and Stable-Baselines3, which can lead to `RecursionError` or installation failures.
 
 ```bash
 # Clone the repository (if not already in it)
