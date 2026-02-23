@@ -1,0 +1,33 @@
+# Multi-Role Financial Automation System Configuration
+
+system:
+  mode: "PAPER" # OPTIONS: LIVE, PAPER, SHADOW, BACKTEST
+  log_level: "INFO"
+  timezone: "US/Eastern"
+
+brokerage:
+  name: "ALPACA" # OPTIONS: IBKR, ALPACA, MOCK
+  paper_trading: true
+  api_key_env_var: "APCA_API_KEY_ID"
+  api_secret_env_var: "APCA_API_SECRET_KEY"
+  base_url: "https://paper-api.alpaca.markets"
+
+risk:
+  max_daily_loss: 1000.00
+  max_leverage: 1.5
+  max_drawdown_percent: 0.02 # 2% intraday
+  risk_envelope_active: true
+  max_global_drawdown: 0.15      # 15% system-wide equity drop
+  max_single_position_pct: 0.10  # 10% cap per ticker
+  volatility_limit: 0.08         # 8% BB Width sentinel limit
+
+data:
+  provider: "MOCK" # OPTIONS: POLYGON, DATABENTO, MOCK
+  history_storage: "data/history.db"
+  feature_store_path: "data/feature_store"
+  news_cache_mins: 30
+  macro_update_mins: 15
+
+orchestrator:
+  rebalance_frequency: "1h"
+  allocation_model: "dynamic"
