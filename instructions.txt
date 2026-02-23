@@ -1,0 +1,62 @@
+# Multi-Role Financial Automation System — Deployment & Quickstart
+
+Welcome to your Autonomous Hedge Fund. Follow these steps to get the system up and running.
+
+## 1. Environment Setup
+The system requires Python 3.10+ (Python 3.12 recommended for GPU acceleration).
+
+```bash
+# Clone the repository (if not already in it)
+# cd Multi-Role-Financial-Automation-System
+
+# Create a virtual environment (Optional but Recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install Dependencies
+pip install -r requirements.txt
+```
+
+## 2. API Configuration
+Create a `.env` file in the root directory and add your Alpaca Markets credentials. You can get these for free at [Alpaca Markets](https://alpaca.markets).
+
+```env
+# Alpaca API Credentials
+APCA_API_KEY_ID=your_key_here
+APCA_API_SECRET_KEY=your_secret_here
+
+# System Mode (PAPER or LIVE)
+SYSTEM_MODE=PAPER
+```
+
+## 3. Launching the System
+The system is divided into two main components: the Trading Engine and the Sentience Dashboard.
+
+### A. Start the Trading Engine
+This runs the main RL loop, fetches data, and executes trades across Sector ETFs and Treasury Bonds.
+```bash
+python live_runner.py
+```
+
+### B. Start the Sentience Dashboard
+Launch the real-time UI to monitor the "Inner Monologue" of the agents, market indicators, and your portfolio performance.
+```bash
+streamlit run dashboard.py
+```
+
+## 4. Key Components
+- **EconomistAgent**: Monitors VIX/Yields to detect market regimes.
+- **Sentinel**: Provides "Black Swan" protection and trade vetoes.
+- **RLStrategyV2**: The PPO-trained brain executing the primary strategy.
+- **RiskManager**: Enforces position sizing and drawdown protection.
+
+## 5. Troubleshooting
+- **No Data?**: Ensure your Alpaca keys are valid and that the market is open or `live_runner.py` is in "warmup" mode (3-day lookback).
+- **GPU Issues?**: If you have an NVIDIA GPU, ensure CUDA is installed. The system will automatically fall back to CPU if needed.
+- **LLM Features**: Ensure Ollama is running locally if you plan to use the `FinancialAI` conversational interface.
+
+### 6. NumPy Version Compatibility
+I have implemented a **NumPy 2.0 Compatibility Shim** in the agent logic. This resolves common `ModuleNotFoundError: numpy._core` errors when moving models between different Python environments (e.g., Local Windows vs. Linux Codespaces). No action is required on your part.
+
+---
+*Happy Trading!*
