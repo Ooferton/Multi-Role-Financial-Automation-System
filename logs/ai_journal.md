@@ -1046,3 +1046,1233 @@
 - I am hearing these key headlines: Pre-Markets Dip on GDP & PCE Figures, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Friday as Investors Digest Key Economic Data, Geopolitical Tensions, 5 Dividend ETFs Beating the S&P 500 This Year...
 
 ---
+### AI Journal Entry: 2026-02-22 22:57:58
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.02%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 19.09.
+- I am hearing these key headlines: Pre-Markets Dip on GDP & PCE Figures, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Friday as Investors Digest Key Economic Data, Geopolitical Tensions, 5 Dividend ETFs Beating the S&P 500 This Year...
+
+---
+### AI Journal Entry: 2026-02-22 23:10:26
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.02%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 19.09.
+- I am hearing these key headlines: Pre-Markets Dip on GDP & PCE Figures, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Friday as Investors Digest Key Economic Data, Geopolitical Tensions, 5 Dividend ETFs Beating the S&P 500 This Year...
+
+---
+### AI Journal Entry: 2026-02-23 17:54:33
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.12%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 17:55:27
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.11%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 17:56:09
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.11%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 17:57:57
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.11%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 17:58:31
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.10%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 17:59:41
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.10%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:00:04
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.10%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:00:52
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.10%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:01:53
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.09%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:02:17
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.10%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:02:57
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.11%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Alphabet, General Mills, CBRE: Top Analyst Calls, Exclusive-China's DeepSeek trained AI model on Nvidia's best chip despite US ban, official says, 1 Reason I'd Buy Veeva Systems Stock and Never Sell...
+
+---
+### AI Journal Entry: 2026-02-23 18:03:12
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.09%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:03:31
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.05%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Can’t Live on $2k a Month in Social Security? Add These ETFs to Your Retirement Portfolio, Over 50? 3 ETFs to Buy Now to Supplement Your Future Social Security, Here’s How Gold Hits $8,000, According to J.P. Morgan...
+
+---
+### AI Journal Entry: 2026-02-23 18:04:11
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.09%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:04:41
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.18%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Sector Update: Financial Stocks Decline Late Afternoon, Sector Update: Financial Stocks Fall Monday Afternoon, Housing: The one thing Trump could do to ease affordability issue...
+
+---
+### AI Journal Entry: 2026-02-23 18:05:06
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.07%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: News Corporation Stock Outlook: Is Wall Street Bullish or Bearish?, Are Wall Street Analysts Bullish on Paramount Skydance Stock?, Fox Corporation Stock: Is Wall Street Bullish or Bearish?...
+
+---
+### AI Journal Entry: 2026-02-23 18:06:53
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.11%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: These 3 Sectors Are Crushing Tech in 2026. Time to Invest?, Are Wall Street Analysts Predicting Martin Marietta Stock Will Climb or Sink?, Citi trims China, leans into U.S. small caps...
+
+---
+### AI Journal Entry: 2026-02-23 18:07:22
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.19%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: These 3 Sectors Are Crushing Tech in 2026. Time to Invest?, Are Wall Street Analysts Predicting Martin Marietta Stock Will Climb or Sink?, Citi trims China, leans into U.S. small caps...
+
+---
+### AI Journal Entry: 2026-02-23 18:07:58
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.37%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Bank Of America Expands Private Credit And Premium Services As Valuation Lags, Dell stock target cut at BofA on rising memory costs, Zacks Market Edge Highlights: MasTec, Caterpillar, Walmart, Eli Lilly and Howmet Aerospace...
+
+---
+### AI Journal Entry: 2026-02-23 18:08:39
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.38%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Adobe Downgrades Spotlight AI Competition And Questions Around Growth Durability, Here's Why Adobe Systems (ADBE) Fell More Than Broader Market, Play the ‘SaaS Apocalypse’ Selloff in Palantir Stock With This 1 Winning, Protective Options Trade...
+
+---
+### AI Journal Entry: 2026-02-23 18:09:21
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.22%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Sector Update: Consumer Stocks Mixed Late Afternoon, Sector Update: Consumer Stocks Mixed Monday Afternoon, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:09:32
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 1.14%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 18:09:44
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.32%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Nvidia to report Q4 earnings ahead of annual GTC event, The AI trade is punishing Big Tech, but not Apple, Is Amazon (AMZN) Turning Marketplace Partnerships Into a New Engine for Its Retail and AI Strategy?...
+
+---
+### AI Journal Entry: 2026-02-23 18:10:06
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.21%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Tesla Has a Robotaxi Problem, and That's Bad News for Its Stock, Tesla Shifts From Premium EVs To Robotaxis As Autopilot Scrutiny Grows, Dow Jones Futures: Trump Tariffs Spark Stock Market Sell-Off; Apple, Nvidia, Tesla Are Key Movers...
+
+---
+### AI Journal Entry: 2026-02-23 18:11:41
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.09%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:11:59
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.02%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: These 3 Dividend ETFs Outperformed Every Market Crash Since 2000, Worried About Inflation? These 3 ETFs Offer Real Protection...
+
+---
+### AI Journal Entry: 2026-02-23 18:12:18
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 1.39%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 18:12:27
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.02%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: California Residents Earning Over $500K Finally Get Some Relief, High Earners Who Pay 37% to the IRS Actually Have an Easy Workaround Now | PZA, Daily ETF Flows: AGG Takes No. 1 Spot...
+
+---
+### AI Journal Entry: 2026-02-23 18:12:27
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.09%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:12:58
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.19%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Zacks Market Edge Highlights: MasTec, Caterpillar, Walmart, Eli Lilly and Howmet Aerospace, Assessing Caterpillar (CAT) Valuation After Powerful Short And Long Term Share Price Gains, Hedge Funds Are Buying Power From Caterpillar, (CAT) Says Jim Cramer...
+
+---
+### AI Journal Entry: 2026-02-23 18:13:44
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.24%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Why Morgan Stanley, Goldman Sachs lifted their oil price targets, Financial Stocks Take a Hit With AI Worries on Investors’ Minds, Goldman Sachs Initiates Coverage of Credo Technology Group Holding Ltd (CRDO) Stock...
+
+---
+### AI Journal Entry: 2026-02-23 18:14:45
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.48%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Is It Too Late To Consider Taiwan Semiconductor Manufacturing (NYSE:TSM) After 95% One Year Rally?, The Smartest Growth Stocks to Buy With $1,000 Right Now, Top Themes for 2026: AI, Defense, and Infrastructure...
+
+---
+### AI Journal Entry: 2026-02-23 18:15:03
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.09%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:15:07
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.46%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Is It Too Late To Consider Taiwan Semiconductor Manufacturing (NYSE:TSM) After 95% One Year Rally?, The Smartest Growth Stocks to Buy With $1,000 Right Now, Top Themes for 2026: AI, Defense, and Infrastructure...
+
+---
+### AI Journal Entry: 2026-02-23 18:15:21
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.09%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:16:41
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.37%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Sector Update: Energy Stocks Rise Late Afternoon, Crude Oil Prices Are Poised to Jump, Price Action Signals, Sector Update: Energy Stocks Rise Monday Afternoon...
+
+---
+### AI Journal Entry: 2026-02-23 18:17:08
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.55%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Nvidia to report Q4 earnings ahead of annual GTC event, Nvidia Stock Is Rising Ahead of Earnings. Why the Move Means Less Than You Think., Citi Lowers PT on Broadcom Inc. (AVGO) Stock...
+
+---
+### AI Journal Entry: 2026-02-23 18:17:29
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.19%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Alphabet, General Mills, CBRE: Top Analyst Calls, Sam Altman And Dario Amodei Stir Controversy At India AI Summit Amid Photo-Op Gesture— OpenAI CEO Says 'I Just Wasn't Sure...', Exclusive-China's DeepSeek trained AI model on Nvidia's best chip despite US ban, official says...
+
+---
+### AI Journal Entry: 2026-02-23 18:17:51
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.08%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:18:00
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.37%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Alphabet, General Mills, CBRE: Top Analyst Calls, General Mills Guidance Cut Puts Earnings Pressure And Dividend Appeal In Focus, Implied Volatility Surging for General Mills Stock Options...
+
+---
+### AI Journal Entry: 2026-02-23 18:18:45
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.61%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Axiom Space Raises $350 Million for Its New Private Space Station, Citigroup Reiterates Buy on Northrop Grumman Corporation (NOC) with Price Target of $781, Boeing and Lockheed's Space Joint Venture Is Falling Apart -- and Northrop Grumman Is the Reason...
+
+---
+### AI Journal Entry: 2026-02-23 18:19:45
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.24%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Why Morgan Stanley, Goldman Sachs lifted their oil price targets, Financial Stocks Take a Hit With AI Worries on Investors’ Minds, Goldman Sachs Initiates Coverage of Credo Technology Group Holding Ltd (CRDO) Stock...
+
+---
+### AI Journal Entry: 2026-02-23 18:20:04
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.16%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Sector Update: Tech Stocks Fall Late Afternoon, Sector Update: Tech Stocks Decline Monday Afternoon, Exchange-Traded Funds Decline as US Equities Fall After Midday...
+
+---
+### AI Journal Entry: 2026-02-23 18:20:08
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.29%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Shifting Story For Omnicom Group (OMC) As Analyst Targets Split On Upside And Risk, Sector Update: Financial Stocks Decline Late Afternoon, Carter’s (CRI) Valuation Check As UBS And Citigroup Lift Outlooks And Price Targets...
+
+---
+### AI Journal Entry: 2026-02-23 18:21:42
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.08%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: What the Treasury Market Is Really Saying About the Economy and the Stock Market, Gold Hits Record High on Political Uncertainty: Can the ETF Rally Last?, Daily ETF Flows: IEF Takes the No.2 Spot...
+
+---
+### AI Journal Entry: 2026-02-23 18:22:18
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.18%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: IQM Quantum Computers to list shares in US at initial $1.8 billion valuation, TCS, Cisco launch hub for autonomous enterprise operations in India, Erste Group Downgrades Cisco Systems, Inc. (CSCO) to Hold on Margin Concerns...
+
+---
+### AI Journal Entry: 2026-02-23 18:22:30
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.20%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: IQM Quantum Computers to list shares in US at initial $1.8 billion valuation, TCS, Cisco launch hub for autonomous enterprise operations in India, Erste Group Downgrades Cisco Systems, Inc. (CSCO) to Hold on Margin Concerns...
+
+---
+### AI Journal Entry: 2026-02-23 18:23:01
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.11%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Gilead Bets Big On New Drug With $7.8 Billion Deal As It Takes On J&J, A Look At Johnson & Johnson (JNJ) Valuation After New Long Term TREMFYA Ulcerative Colitis Data, Bloomberg Reports Potential Major Asset Sale by Johnson & Johnson (JNJ)...
+
+---
+### AI Journal Entry: 2026-02-23 18:23:03
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.11%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:23:45
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.23%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Trump's State of the Union, Home Depot, Fed: What to Watch, Earnings live: Hims & Hers stock slides, Domino's rises as investors await crucial update from Nvidia, Home Depot Earnings Are Almost Here. The Retailer Is Still Waiting for the Housing Market to Thaw....
+
+---
+### AI Journal Entry: 2026-02-23 18:24:14
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.13%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:24:53
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.19%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Sector Update: Energy Stocks Rise Late Afternoon, Sector Update: Energy Stocks Rise Monday Afternoon, Chevron, Iraq Enter Exclusive Negotiations Over Giant Oil Field...
+
+---
+### AI Journal Entry: 2026-02-23 18:25:06
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.13%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:25:09
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.12%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Do Not Retire in 2026 Unless You Own at Least One of These 3 ETFs, MoneyMasters Podcast 2-19-26- With Money Leaving Tech, How Should You Diversify, Market Minute 2-13-26- In Markets, AI is Disrupting...Everything...
+
+---
+### AI Journal Entry: 2026-02-23 18:25:15
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.60%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Axiom Space Raises $350 Million for Its New Private Space Station, Citigroup Reiterates Buy on Northrop Grumman Corporation (NOC) with Price Target of $781, Boeing and Lockheed's Space Joint Venture Is Falling Apart -- and Northrop Grumman Is the Reason...
+
+---
+### AI Journal Entry: 2026-02-23 18:26:43
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.26%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Nvidia to report Q4 earnings ahead of annual GTC event, The AI trade is punishing Big Tech, but not Apple, Microsoft Ties Xbox Leadership To AI Cloud And Security Ambitions...
+
+---
+### AI Journal Entry: 2026-02-23 18:27:18
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.25%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Financial Stocks Take a Hit With AI Worries on Investors’ Minds, Cloudflare, Inc. (NET) Enters into Strategic Partnership with Mastercard Incorporated...
+
+---
+### AI Journal Entry: 2026-02-23 18:27:30
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.57%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Financial Stocks Take a Hit With AI Worries on Investors’ Minds, Cloudflare, Inc. (NET) Enters into Strategic Partnership with Mastercard Incorporated...
+
+---
+### AI Journal Entry: 2026-02-23 18:29:10
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.25%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:29:53
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.32%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Gilead Bets Big On New Drug With $7.8 Billion Deal As It Takes On J&J, A Look At Johnson & Johnson (JNJ) Valuation After New Long Term TREMFYA Ulcerative Colitis Data, Bloomberg Reports Potential Major Asset Sale by Johnson & Johnson (JNJ)...
+
+---
+### AI Journal Entry: 2026-02-23 18:30:14
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.13%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Alphabet, General Mills, CBRE: Top Analyst Calls, Sam Altman And Dario Amodei Stir Controversy At India AI Summit Amid Photo-Op Gesture— OpenAI CEO Says 'I Just Wasn't Sure...', Exclusive-China's DeepSeek trained AI model on Nvidia's best chip despite US ban, official says...
+
+---
+### AI Journal Entry: 2026-02-23 18:30:18
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.74%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: How does the Dow Jones perform during stock market crashes?, Kimberly-Clark Details “Powering Care” Plan, Kenvue Integration Ahead of 2026 Close, Why Starbucks (SBUX) Stock Is Down Today...
+
+---
+### AI Journal Entry: 2026-02-23 18:31:43
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.35%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: IQM Quantum Computers to list shares in US at initial $1.8 billion valuation, TCS, Cisco launch hub for autonomous enterprise operations in India, Erste Group Downgrades Cisco Systems, Inc. (CSCO) to Hold on Margin Concerns...
+
+---
+### AI Journal Entry: 2026-02-23 18:32:19
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.19%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Is PepsiCo (PEP) Pricing Look Attractive After Recent Share Price Strength, Celsius Board Shakeup Deepens PepsiCo Ties And Highlights Valuation Gap, Can Functional Snacks and Drinks Power PepsiCo's Next Leg Up?...
+
+---
+### AI Journal Entry: 2026-02-23 18:32:41
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.64%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Why Nike (NKE) Stock Is Trading Lower Today, Factbox-Stocks to watch as Trump's new tariffs spell more uncertainty, DoorDash, Booking, Chewy, Wayfair, and Expedia Shares Plummet, What You Need To Know...
+
+---
+### AI Journal Entry: 2026-02-23 18:32:43
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.26%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Stocks Finish Sharply Lower on Trade Uncertainty and AI-Disruption Fears, Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts...
+
+---
+### AI Journal Entry: 2026-02-23 18:34:46
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.25%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:37:59
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.21%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:42:24
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.17%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:44:30
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.22%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:48:07
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.28%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:53:08
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Cautious & Defensive
+
+**Observations:**
+- Average market volatility is at 0.57%.
+- Current win rate stands at 33%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Alphabet, General Mills, CBRE: Top Analyst Calls, General Mills Guidance Cut Puts Earnings Pressure And Dividend Appeal In Focus, Implied Volatility Surging for General Mills Stock Options...
+
+---
+### AI Journal Entry: 2026-02-23 18:55:07
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.30%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:58:26
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.28%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:58:38
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.93%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 18:59:44
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.25%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 18:59:59
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.93%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:01:39
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.69%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:03:27
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Aggressive & Confident
+
+**Observations:**
+- Average market volatility is at 0.45%.
+- Current win rate stands at 100%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Is It Time To Reconsider JPMorgan Chase (JPM) After Recent Share Price Weakness?, Jamie Dimon Dismisses Fears Over How AI Will Hit JPMorgan, JPMorgan Chase & Co. (JPM) Dips More Than Broader Market: What You Should Know...
+- Market conditions are aligning perfectly with my current weights.
+
+---
+### AI Journal Entry: 2026-02-23 19:03:36
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.54%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:04:44
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.46%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Adobe Downgrades Spotlight AI Competition And Questions Around Growth Durability, Here's Why Adobe Systems (ADBE) Fell More Than Broader Market, Play the ‘SaaS Apocalypse’ Selloff in Palantir Stock With This 1 Winning, Protective Options Trade...
+
+---
+### AI Journal Entry: 2026-02-23 19:06:21
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.30%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:08:09
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.28%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:10:28
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.31%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:12:54
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.32%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:13:38
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.34%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:16:47
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.39%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:18:24
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.40%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 19:23:24
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.00%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 20:13:55
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.07%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 20:17:55
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.08%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 20:18:31
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.83%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 20:21:00
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.79%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 20:21:12
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.12%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 20:24:41
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.12%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 20:25:09
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.57%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 20:27:17
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.14%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 20:27:54
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.56%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 20:29:47
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.15%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 20:30:02
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.68%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+
+---
+### AI Journal Entry: 2026-02-23 20:33:15
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.18%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---
+### AI Journal Entry: 2026-02-23 20:35:01
+**Market Sentiment:** Consolidating (Risk-On / Stable)
+**Model Internal Mood:** Neutral & Analytical
+
+**Observations:**
+- Average market volatility is at 0.18%.
+- Current win rate stands at 50%.
+- Global Economic Vibe: Risk-On / Stable.
+- VIX is trading at 21.01.
+- I am hearing these key headlines: Real Estate Stocks Rise: Realty Income (O) & Simon Property (SPG) Lead Last Week’s Winners, Exchange-Traded Funds, Equity Futures Lower Pre-Bell Monday Amid Renewed Trade Doubts, 7 S&P 500 Stocks Gain The Most After Trump Tariffs Are Slapped Down...
+
+---

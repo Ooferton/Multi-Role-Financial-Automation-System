@@ -32,9 +32,6 @@ class RiskManager:
         equity = portfolio.get('equity', 10000)
         trade_value = quantity * price
         
-        # Minimum Order Value Check (Alpaca requirement)
-        if trade_value < 1.0:
-            return {"approved": False, "reason": f"Trade value ${trade_value:.2f} below Alpaca $1.00 minimum"}
 
         position_pct = trade_value / equity if equity > 0 else 0
         

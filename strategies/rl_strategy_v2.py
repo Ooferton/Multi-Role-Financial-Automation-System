@@ -62,6 +62,7 @@ class RLStrategyV2(TradingStrategy):
         
         self.journal_path = "logs/ai_journal.md"
         self._last_journal_time = 0.0
+        self._last_export_time = 0.0
         self._last_macro_time = 0.0
         self.macro_outlook = {}
         
@@ -83,6 +84,11 @@ class RLStrategyV2(TradingStrategy):
         self._cached_positions = []
         
         self.logger.info(f"Strategy v2 initialized with genome:\n{self.evolver.get_status()}")
+        
+        # Determine status file path based on mode
+        is_btm = config.get('system', {}).get('crypto_etf_only', False)
+        self.status_path = "data/sentience_bitcoin.json" if is_btm else "data/sentience_status.json"
+        
         self._sync_positions()
 
     def _sync_positions(self):
@@ -111,6 +117,7 @@ class RLStrategyV2(TradingStrategy):
         price = tick.price
         symbol = tick.symbol
         genome = self.evolver.genome
+        is_btm = self.config.get('system', {}).get('crypto_etf_only', False)
         
         # 1. Update Buffer (Per Symbol)
         self.history_buffers[symbol].append({
@@ -206,6 +213,11 @@ class RLStrategyV2(TradingStrategy):
             else: # SHORT
                 pnl_pct = (entry_price - price) / entry_price
                 
+            # --- AGGRESSIVE BITCOIN RULE: ZERO-TOLERANCE STOP LOSS ---
+            if is_btm and pnl_pct < -0.0005: # -0.05%
+                self.logger.warning(f"🔺 AGGRESSIVE STOP LOSS triggered for {symbol}: {pnl_pct:.3%} (Zero-Tolerance Mode)")
+                return self._close_position(symbol, price, current_qty, "AGGRESSIVE STOP LOSS")
+
             if pnl_pct < -genome.stop_loss_pct:
                 self.logger.warning(f"STOP LOSS triggered for {symbol} ({side}): {pnl_pct:.2%}")
                 return self._close_position(symbol, price, current_qty, "STOP LOSS")
@@ -260,19 +272,30 @@ class RLStrategyV2(TradingStrategy):
         sentiment = self.news_engine.get_sentiment(tick.symbol)
         
         # 11.5 Always update dashboard sentience metrics
+        # Clear stale pulses if mode changed
+        last_m = getattr(self, '_last_mode_cache', None)
+        if last_m is not None and last_m != is_btm:
+            self.logger.info(f"🧹 Mode Switch Detected in Strategy: Clearing {len(self.live_activity)} stale pulses.")
+            self.live_activity.clear()
+        self._last_mode_cache = is_btm
+
         self.live_activity[tick.symbol] = {
             "status": "SCANNING",
             "detail": f"Sentiment: {sentiment.get('verdict')} ({sentiment.get('score'):.2f})",
             "timestamp": datetime.now().strftime("%H:%M:%S")
         }
-        self._update_sentience_export(indicators, sentiment)
-        
-        # 11.6 Periodic Journaling
+        # 11.6 Periodic Journaling / Dashboard Export
         self._check_journaling(indicators, summary, sentiment)
 
         # 12. Ask the AI Agent
         action = self.agent.predict(obs)
         action_val = float(action[0])
+
+        # LOUD DIAGNOSTICS for Bitcoin/ETF
+        if symbol in ["BTC/USD", "IBIT", "BITO", "FBTC", "ARKB"]:
+            self.logger.info(f"🔍 [AI DIAGNOSTIC] {symbol} | Price: {price} | Action: {action_val:.4f} | RSI: {indicators['rsi_14']:.1f} | MACD: {indicators['macd']:.4f}")
+            if abs(action_val) < 0.1:
+                self.logger.warning(f"⚠️ {symbol} Signal is FLAT (Near 0). AI might be scale-choked by price/MACD.")
         
         # 12.5 Sentiment Sentinel: Action-Aware News Veto
         action_str = "BUY" if action_val > genome.buy_threshold else "SELL" if action_val < genome.sell_threshold else "WAIT"
@@ -286,6 +309,20 @@ class RLStrategyV2(TradingStrategy):
                 }
                 self.logger.warning(sent_safety["reason"])
                 return None
+            
+            # --- AGGRESSIVE BITCOIN RULE: MOMENTUM HOLD ---
+            if is_btm and action_str == "SELL":
+                # Look back at price 1 minute ago (previous bar)
+                if len(self.history_buffers[symbol]) > 1:
+                    prev_close = self.history_buffers[symbol][-2]['close']
+                    if price > prev_close:
+                        self.logger.info(f"💎 MOMENTUM HOLD for {symbol}: AI says SELL, but price is RISING (${price:.2f} > ${prev_close:.2f}). Vetoing exit.")
+                        self.live_activity[tick.symbol] = {
+                            "status": "MOMENTUM HOLD",
+                            "detail": f"Vetoing AI SELL while price is climbing",
+                            "timestamp": datetime.now().strftime("%H:%M:%S")
+                        }
+                        return None
 
         # 12.6 Generate Reasoning
         reasoning = self.reasoner.explain_trade_v2(
@@ -328,6 +365,28 @@ class RLStrategyV2(TradingStrategy):
             reasoning.risk_notes.append("Macro sizing override: Half-size due to Risk-Off regime")
 
         trade_value = buying_power * min(trade_fraction, 1.0) * genome.max_position_pct
+        
+        # --- BUYING POWER RESERVATION ---
+        # Portfolio Mode (Standard Stocks) must leave at least $15 for Crypto Mode.
+        if not is_btm and buying_power < 15.00 and action_val > genome.buy_threshold:
+            # Only log if we were actually planning to buy
+            self.logger.info(f"🔇 [PORTFOLIO MODE] Standing down. Buying power ${buying_power:.2f} is below $15.00 Crypto Reserve.")
+            return None
+
+        # --- CRYPTO-AWARE MINIMUM ORDER FLOOR ---
+        # Direct coins (BTC/USD, DOGE/USD) require $10.00 min.
+        # Stocks/ETFs (RIOT, IBIT) require $1.00 min.
+        is_coin = "/" in tick.symbol
+        floor = 10.05 if is_coin else 1.05
+        
+        if 0 < trade_value < floor:
+            if buying_power >= floor:
+                self.logger.info(f"📍 Bumping {tick.symbol} trade value from ${trade_value:.2f} to ${floor:.2f} (Broker Minimum Floor)")
+                trade_value = floor
+            else:
+                self.logger.warning(f"⚠️ {tick.symbol} value ${trade_value:.2f} is below Alpaca floor (${floor}), and insufficient buying power to bump.")
+                return None
+
         quantity = round(trade_value / price, 4) if price > 0 else 0
         
         if quantity <= 0:
@@ -524,13 +583,26 @@ class RLStrategyV2(TradingStrategy):
         self._update_sentience_export(agg_indicators, sentiment)
 
     def _update_sentience_export(self, indicators: Dict, sentiment: Optional[Dict]):
-        """Exports high-frequency metrics for the dashboard."""
+        """Exports high-frequency metrics for the dashboard with throttling."""
+        current_time = time.time()
+        if current_time - self._last_export_time < 1.0: # Throttle to 1Hz
+            return
+            
         try:
             import json
-            status_path = "data/sentience_status.json"
             os.makedirs("data", exist_ok=True)
             
+            # Read-Modify-Write to preserve 'pid' and 'active' set by the runner
+            curr_data = {}
+            if os.path.exists(self.status_path):
+                try:
+                    with open(self.status_path, "r", encoding="utf-8") as f:
+                        curr_data = json.load(f)
+                except: pass
+            
             status = {
+                "active": True,
+                "pid": os.getpid(),
                 "timestamp": datetime.now().isoformat(),
                 "vix": self.macro_outlook.get("metrics", {}).get("VIX", 0),
                 "vibe": self.macro_outlook.get("vibe", "Neutral"),
@@ -540,8 +612,12 @@ class RLStrategyV2(TradingStrategy):
                 "pulse": self.live_activity # Include per-ticker pulse
             }
             
-            with open(status_path, "w") as f:
-                json.dump(status, f)
+            # Merge with existing data (Runner metadata like 'pid' and 'active')
+            curr_data.update(status)
+            
+            with open(self.status_path, "w", encoding="utf-8") as f:
+                json.dump(curr_data, f)
+            
+            self._last_export_time = current_time
         except Exception:
             pass # Silent failure for dashboard export
-

@@ -86,6 +86,15 @@ class TradingAgent(BaseAgent):
         """
         Executes a trade approved by the Orchestrator.
         """
+        # FINAL SAFETY GUARD: Bitcoin/ETF Only Mode
+        symbol = instruction.get('symbol')
+        is_btm = self.config.get('system', {}).get('crypto_etf_only', False)
+        if is_btm:
+            allowed = ["BTC/USD", "ETH/USD", "DOGE/USD", "IBIT", "BITO", "FBTC", "ARKB", "HODL", "COIN", "MSTR", "MARA", "RIOT"]
+            if symbol not in allowed:
+                self.logger.error(f"❌ MODE BLOCKED: Attempted to trade {symbol} while in Bitcoin/ETF Only Mode!")
+                return
+
         self.logger.info(f"TradingAgent executing: {instruction}")
         
         try:

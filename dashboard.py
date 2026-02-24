@@ -29,15 +29,27 @@ def load_config():
 def load_sentience_status():
     if os.path.exists(status_path):
         try:
-            with open(status_path, "r") as f:
+            with open(status_path, "r", encoding="utf-8", errors="replace") as f:
+                return json.load(f)
+        except: pass
+    return {}
+
+def load_bitcoin_status():
+    bit_status_path = "data/sentience_bitcoin.json"
+    if os.path.exists(bit_status_path):
+        try:
+            with open(bit_status_path, "r", encoding="utf-8", errors="replace") as f:
                 return json.load(f)
         except: pass
     return {}
 
 def load_ai_journal():
     if os.path.exists(journal_path):
-        with open(journal_path, "r") as f:
-            return f.read()
+        try:
+            with open(journal_path, "r", encoding="utf-8", errors="replace") as f:
+                return f.read()
+        except Exception as e:
+            return f"Error loading journal: {e}"
     return "No journal entries yet."
 
 def load_market_data(symbol=None):
@@ -77,70 +89,66 @@ def get_all_symbols():
 
 config = load_config()
 sentience = load_sentience_status()
+bit_sentience = load_bitcoin_status()
 all_symbols = get_all_symbols()
 
 # 2. Sidebar Controls
 st.sidebar.header("🕹️ Controls")
 selected_ticker = st.sidebar.selectbox("Select Ticker", all_symbols, index=0)
 
-# Emergency Circuit Breaker
+# Emergency System
 st.sidebar.divider()
 st.sidebar.subheader("🚨 Emergency System")
 lock_file = "data/circuit_breaker.lock"
 is_triggered = os.path.exists(lock_file)
 
 if not is_triggered:
-    if st.sidebar.button("TRIGGER CIRCUIT BREAKER", type="primary", use_container_width=True):
-        st.sidebar.warning("Liquidating Everything...")
+    if st.sidebar.button("TRIGGER CIRCUIT BREAKER", type="primary", width="stretch"):
+        st.sidebar.warning("Halting System & Liquidating...")
         
-        # 1. Initialize Broker to Liquidate
-        broker_name = config.get('brokerage', {}).get('name', 'MOCK')
-        if broker_name == "ALPACA":
+        # 1. Create Lock File IMMEDIATELY to stop the runners
+        with open(lock_file, "w") as f:
+            f.write(f"Triggered via dashboard at {datetime.now()}")
+        
+        # 2. Attempt Liquidation
+        try:
             from agents.alpaca_broker import AlpacaBroker
-            b = AlpacaBroker(paper=config.get('brokerage', {}).get('paper_trading', True))
-        else:
-            from agents.mock_broker import MockBroker
-            b = MockBroker()
-        
-        # 2. Execute Liquidation
-        if b.liquidate_all():
-            # 3. Create Lock File
-            with open(lock_file, "w") as f:
-                f.write(f"Triggered via dashboard at {datetime.now()}")
+            b = AlpacaBroker(paper=True)
+            b.liquidate_all()
             st.sidebar.success("SENTIENCE HALTED. All positions closed.")
-            time.sleep(2)
-            st.rerun()
+        except Exception as e:
+            st.sidebar.error(f"Halted, but liquidation failed: {e}")
+            
+        time.sleep(2)
+        st.rerun()
 else:
     st.sidebar.error("SYSTEM HALTED")
-    if st.sidebar.button("Reset Circuit Breaker", use_container_width=True):
+    if st.sidebar.button("Reset Circuit Breaker", width="stretch"):
         if os.path.exists(lock_file):
             os.remove(lock_file)
             st.sidebar.success("System Reset. Ready for operation.")
             time.sleep(2)
             st.rerun()
 
-market_df = load_market_data(selected_ticker)
-trades_df = load_trades(selected_ticker)
-
-# 2. Sentience Metrics Bar
-mode = config.get("system", {}).get("mode", "UNKNOWN")
-broker_name = config.get("brokerage", {}).get("name", "MOCK")
-
+# 2. Multi-Process Metrics Bar
 col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
-    st.metric("System Mode", f"{mode} ({broker_name})", delta_color="normal")
+    portfolio_active = sentience.get("active", False)
+    st.metric("Portfolio Runner", "ACTIVE" if portfolio_active else "OFFLINE", 
+              delta=f"PID {sentience.get('pid', 'N/A')}" if portfolio_active else None)
 with col2:
+    bit_active = bit_sentience.get("active", False)
+    st.metric("BitRunner (Fast)", "ACTIVE" if bit_active else "OFFLINE", 
+              delta=f"PID {bit_sentience.get('pid', 'N/A')}" if bit_active else None,
+              delta_color="normal")
+with col3:
     vibe = sentience.get("vibe", "Neutral")
     st.metric("Economic Vibe", vibe)
-with col3:
-    vix = sentience.get("vix", 0)
-    st.metric("Volatility (VIX)", f"{vix:.2f}")
 with col4:
     sentiment = sentience.get("news_sentiment", 0)
     verdict = sentience.get("news_verdict", "Neutral")
     st.metric("News Sentiment", f"{verdict}", delta=f"{sentiment:.2f}")
 with col5:
-    # Use global trades for total count, but local for display
     full_trades = load_trades()
     total_trades = len(full_trades) if not full_trades.empty else 0
     st.metric("Total Trades", total_trades)
@@ -152,9 +160,12 @@ main_col, side_col = st.columns([2, 1])
 
 with main_col:
     st.subheader(f"📊 {selected_ticker} Activity & Trade Execution")
+
+    market_df = load_market_data(selected_ticker)
+    trades_df = load_trades(selected_ticker)
     if not market_df.empty:
         # Candle Aggregation (Resample ticks to 1-Min Bars)
-        df_resampled = market_df.set_index('timestamp').resample('1T').agg({
+        df_resampled = market_df.set_index('timestamp').resample('1min').agg({
             'price': ['first', 'max', 'min', 'last'],
             'size': 'sum'
         })
@@ -200,7 +211,7 @@ with main_col:
             margin=dict(l=0, r=0, t=30, b=0),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     else:
         st.info(f"Waiting for market data for {selected_ticker}...")
 
@@ -231,11 +242,19 @@ with side_col:
         st.info(f"**Economist Outlook:** {sentience['macro_summary']}")
 
     st.subheader("📡 Live Agent Activity")
-    pulse = sentience.get("pulse", {})
-    if pulse:
+    # Merge pulses from both runners
+    p1 = sentience.get("pulse", {})
+    p2 = bit_sentience.get("pulse", {})
+    combined_pulse = {**p1, **p2}
+    
+    if combined_pulse:
         pulse_data = []
-        for sym, data in pulse.items():
+        for sym, data in combined_pulse.items():
+            # Tag system source
+            bit_assets = ["BTC/USD", "ETH/USD", "DOGE/USD", "IBIT", "BITO", "FBTC", "ARKB", "HODL", "COIN", "MSTR", "MARA", "RIOT"]
+            source = "BitRunner" if sym in bit_assets else "Portfolio"
             pulse_data.append({
+                "System": source,
                 "Symbol": sym,
                 "Status": data.get("status"),
                 "Detail": data.get("detail"),

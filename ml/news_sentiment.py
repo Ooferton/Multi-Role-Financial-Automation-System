@@ -1,6 +1,7 @@
 import yfinance as yf
 from textblob import TextBlob
 import logging
+import feedparser
 from typing import Dict, List, Optional
 from datetime import datetime
 
@@ -60,8 +61,38 @@ class NewsSentimentEngine:
             return result
             
         except Exception as e:
-            self.logger.error(f"Error fetching sentiment for {symbol}: {e}")
-            return {"score": 0.0, "headlines": [], "verdict": "Neutral (Error)"}
+            self.logger.error(f"Error fetching yfinance sentiment for {symbol}: {e}")
+            return self._get_rss_sentiment()
+
+    def _get_rss_sentiment(self) -> Dict:
+        """
+        Fallback using generic financial RSS feeds if primary source fails.
+        """
+        try:
+            # CNBC Top News RSS as a robust general economic source
+            feed_url = "https://search.cnbc.com/rs/search/view.xml?partnerId=2000&keywords=market"
+            feed = feedparser.parse(feed_url)
+            
+            headlines = []
+            for entry in feed.entries[:5]:
+                headlines.append(entry.title)
+            
+            total_polarity = 0.0
+            for h in headlines:
+                analysis = TextBlob(h)
+                total_polarity += analysis.sentiment.polarity
+            
+            avg_polarity = total_polarity / len(headlines) if headlines else 0.0
+            verdict = "Bullish" if avg_polarity > 0.05 else "Bearish" if avg_polarity < -0.05 else "Neutral"
+            
+            return {
+                "score": round(avg_polarity, 4),
+                "headlines": headlines,
+                "verdict": f"{verdict} (Market Scan)",
+                "timestamp": datetime.now()
+            }
+        except:
+            return {"score": 0.0, "headlines": [], "verdict": "Neutral (Unavailable)"}
 
     def get_market_vibe(self, symbols: List[str]) -> str:
         """

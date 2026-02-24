@@ -1,0 +1,44 @@
+name: Sentience Trading Bot (No Credit Card)
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # Every 30 minutes
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to commit trade logs back
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Trading Bot (One-Shot)
+        env:
+          APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
+          APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
+          SYSTEM_MODE: PAPER
+        run: |
+          python live_runner.py --one-shot
+
+      - name: Commit & Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/*.csv ai_journal.md logs/*.log || true
+          git commit -m "Update trade logs and AI journal [skip ci]" || echo "No changes to commit"
+          git push

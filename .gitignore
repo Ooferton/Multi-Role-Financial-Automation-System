@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+*.egg-info/
+
+# Models & Data
+ml/checkpoints/
+data/*.csv
+!data/trades.csv
+data/*.db
+!ai_journal.md
+
+# Secrets
+.env
+
+# Logs
+*.log
+live_trading.log
+
+# IDE
+.vscode/
+.idea/

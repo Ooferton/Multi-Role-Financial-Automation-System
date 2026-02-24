@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  trading_engine:
+    build: .
+    container_name: trading_engine
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: python live_runner.py
+
+  sentience_dashboard:
+    build: .
+    container_name: sentience_dashboard
+    restart: always
+    env_file: .env
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    command: streamlit run dashboard.py --server.port=8501 --server.address=0.0.0.0
