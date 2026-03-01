@@ -24,11 +24,26 @@ if numpy.__version__.startswith("1."):
         pass
 # ------------------------------------
 
-import gymnasium as gym
-from stable_baselines3 import PPO
+try:
+    import gymnasium as gym
+    _GYM_AVAILABLE = True
+except ImportError:
+    _GYM_AVAILABLE = False
+
+try:
+    from stable_baselines3 import PPO
+    _SB3_AVAILABLE = True
+except ImportError:
+    _SB3_AVAILABLE = False
+
+try:
+    import torch
+    _TORCH_AVAILABLE = True
+except ImportError:
+    _TORCH_AVAILABLE = False
+
 from typing import Any
 import numpy as np
-import torch
 from ml.features import TechnicalIndicators
 
 # The 10 indicator columns in the order they appear in the observation vector
@@ -47,24 +62,30 @@ V2_INDICATOR_COLUMNS = [
 ]
 
 
-class TradingEnvironmentV2(gym.Env):
+# Conditional base class: use gym.Env if available, otherwise plain object
+_GymEnvBase = gym.Env if _GYM_AVAILABLE else object
+
+class TradingEnvironmentV2(_GymEnvBase):
     """
     Enhanced trading environment with 10 market indicators.
     Observation: 14-dim vector (10 indicators + price + returns + position + cash).
     Action: Continuous [-1, 1] representing target portfolio fraction.
     """
     def __init__(self, df=None):
-        super(TradingEnvironmentV2, self).__init__()
+        if _GYM_AVAILABLE:
+            super(TradingEnvironmentV2, self).__init__()
         
         # ACTION: [Position Change] (-1 to 1)
-        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
+        if _GYM_AVAILABLE:
+            self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
         
         # OBSERVATION: 14 dimensions
         # [Price, Returns, 10 indicators, Position, Cash]
         self.obs_dim = 14
-        self.observation_space = gym.spaces.Box(
-            low=-np.inf, high=np.inf, shape=(self.obs_dim,), dtype=np.float32
-        )
+        if _GYM_AVAILABLE:
+            self.observation_space = gym.spaces.Box(
+                low=-np.inf, high=np.inf, shape=(self.obs_dim,), dtype=np.float32
+            )
         
         # Data
         self.df = df
@@ -83,6 +104,7 @@ class TradingEnvironmentV2(gym.Env):
         self.position = 0.0
         self.cash = 10000.0
         self.initial_value = 10000.0
+        self.initial_price = self.prices[0] if len(self.prices) > 0 else 100.0
 
     def _precompute_features(self):
         """
@@ -103,6 +125,7 @@ class TradingEnvironmentV2(gym.Env):
         self.current_step = 0
         self.position = 0.0
         self.cash = 10000.0
+        self.initial_price = self.prices[0] if len(self.prices) > 0 else 100.0
         return self._get_obs(), {}
 
     def _get_obs(self):
@@ -115,12 +138,17 @@ class TradingEnvironmentV2(gym.Env):
         prev_price = self.feature_array[self.current_step - 1][0] if self.current_step > 0 else price
         ret = (price - prev_price) / prev_price if prev_price > 0 else 0.0
         
+        # Normalize price and cash relative to initial values so all features are ~[0, 2]
+        norm_price = price / self.initial_price if self.initial_price > 0 else 0.0
+        norm_cash = self.cash / self.initial_value
+        norm_position = np.clip(self.position * price / self.initial_value, -2.0, 2.0)
+        
         # Construct 14-dim vector:
-        # [Price, Returns, RSI, MACD, Signal, BB_Width, Dist_SMA_20,
+        # [NormPrice, Returns, RSI, MACD, Signal, BB_Width, Dist_SMA_20,
         #  Histogram, BB_Pos, Dist_SMA_50, ATR_norm, OBV_norm,
-        #  Position, Cash]
+        #  NormPosition, NormCash]
         obs = np.array([
-            price,
+            norm_price,
             ret,
             feats[1],   # RSI
             feats[2],   # MACD
@@ -132,9 +160,12 @@ class TradingEnvironmentV2(gym.Env):
             feats[8],   # Dist SMA 50 (NEW)
             feats[9],   # ATR Normalized (NEW)
             feats[10],  # OBV Normalized (NEW)
-            self.position,
-            self.cash
+            norm_position,
+            norm_cash
         ], dtype=np.float32)
+        
+        # Sanitize: replace any NaN/Inf with 0 before PyTorch sees it
+        obs = np.nan_to_num(obs, nan=0.0, posinf=0.0, neginf=0.0)
             
         return obs
 
@@ -144,15 +175,30 @@ class TradingEnvironmentV2(gym.Env):
         trade_size_fraction = float(action[0])
         
         total_value = self.cash + (self.position * current_price)
+        
+        # Guard against zero/negative total value
+        if not np.isfinite(total_value) or total_value <= 0:
+            total_value = self.initial_value
+            self.cash = self.initial_value
+            self.position = 0.0
+        
         target_position_value = total_value * trade_size_fraction
-        target_position_units = target_position_value / current_price if current_price > 0 else 0
+        target_position_units = target_position_value / current_price if current_price > 1e-6 else 0.0
+        
+        # Clamp position units to prevent float overflow
+        target_position_units = np.clip(target_position_units, -1e8, 1e8)
         
         # Transaction Cost (0.1%)
         trade_value = abs((target_position_units - self.position) * current_price)
+        if not np.isfinite(trade_value):
+            trade_value = 0.0
         cost = trade_value * 0.001
         
         self.position = target_position_units
         self.cash = total_value - (self.position * current_price) - cost
+        
+        # Clamp cash to prevent overflow
+        self.cash = np.clip(self.cash, -1e10, 1e10)
         
         # 2. Advance Time
         self.current_step += 1
@@ -163,9 +209,12 @@ class TradingEnvironmentV2(gym.Env):
         new_price = self.prices[self.current_step]
         new_total_value = self.cash + (self.position * new_price)
         
-        # Sharpe-inspired reward: risk-adjusted return
-        raw_return = (new_total_value - total_value) / total_value
-        reward = raw_return * 100  # Scale for learning stability
+        if not np.isfinite(new_total_value):
+            new_total_value = total_value
+        
+        # Sharpe-inspired reward: log-return for scale invariance
+        raw_return = (new_total_value - total_value) / total_value if total_value > 0 else 0.0
+        reward = float(np.clip(raw_return * 100, -10, 10))  # Clamped for stability
         
         # Penalty for excessive trading (reduces churn)
         if trade_value > total_value * 0.3:
@@ -178,39 +227,48 @@ class RLAgentV2:
     """
     PPO Trading Real v2 — Reinforcement Learning Agent with 10 market indicators.
     Wraps stable-baselines3 PPO model with the enhanced 14-dim observation space.
-    Supports NVIDIA GPU acceleration via CUDA.
+    Supports heuristic fallback if SB3 is missing (e.g. cloud environments).
     """
     def __init__(self, model_path: str = None, training_data=None, learning_rate: float = 0.001):
         self.env = TradingEnvironmentV2(df=training_data)
+        self.model = None
         
-        # Auto-detect GPU
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        
-        if model_path:
-            # Allow overriding learning rate when loading
-            self.model = PPO.load(model_path, env=self.env, device=self.device, custom_objects={'learning_rate': learning_rate})
+        if _SB3_AVAILABLE:
+            # Auto-detect GPU
+            self.device = 'cuda' if (_TORCH_AVAILABLE and torch.cuda.is_available()) else 'cpu'
+            
+            if model_path and (os.path.exists(model_path) or os.path.exists(model_path + ".zip")):
+                try:
+                    self.model = PPO.load(model_path, env=self.env, device=self.device, custom_objects={'learning_rate': learning_rate})
+                except Exception as e:
+                    print(f"Warning: Failed to load RL model, using heuristic: {e}")
+            elif not model_path:
+                self.model = PPO(
+                    "MlpPolicy", 
+                    self.env, 
+                    verbose=1, 
+                    learning_rate=learning_rate,
+                    device=self.device,
+                )
         else:
-            self.model = PPO(
-                "MlpPolicy", 
-                self.env, 
-                verbose=1, 
-                learning_rate=learning_rate,
-                n_steps=2048,
-                batch_size=64,
-                n_epochs=10,
-                gamma=0.99,
-                gae_lambda=0.95,
-                clip_range=0.2,
-                ent_coef=0.01,
-                device=self.device,
-            )
+            print("RL Brain (SB3) not found. Initializing Heuristic Fallback Agent.")
 
     def predict(self, observation: np.ndarray) -> Any:
-        action, _states = self.model.predict(observation)
-        return action
+        if self.model:
+            action, _states = self.model.predict(observation)
+            return action
+        
+        # Heuristic Fallback (Wait if RSI neutral, Buy if low, Sell if high)
+        # obs order: [Price, Returns, RSI, MACD, Signal, BB_Width, Trend, ...]
+        rsi = observation[2]
+        if rsi < 30: return np.array([0.8], dtype=np.float32) # Oversold -> Buy
+        if rsi > 70: return np.array([-0.8], dtype=np.float32) # Overbought -> Sell
+        return np.array([0.0], dtype=np.float32) # Neutral
 
     def train(self, total_timesteps: int = 50000, callbacks=None):
-        self.model.learn(total_timesteps=total_timesteps, callback=callbacks)
+        if self.model:
+            self.model.learn(total_timesteps=total_timesteps, callback=callbacks)
 
     def save(self, path: str):
-        self.model.save(path)
+        if self.model:
+            self.model.save(path)

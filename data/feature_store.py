@@ -11,9 +11,11 @@ import logging
 @dataclass
 class MarketTick:
     symbol: str
-    timestamp: datetime
     price: float
     size: float
+    timestamp: datetime
+    bid_size: float = 0.0
+    ask_size: float = 0.0
     exchange: str
 
 @dataclass

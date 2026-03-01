@@ -1,0 +1,52 @@
+# SearXNG Settings for Sentience Trading System
+# Minimal config to enable JSON API search
+
+use_default_settings: true
+
+server:
+  port: 8888
+  bind_address: "127.0.0.1"
+  secret_key: "sentience-searxng-key-2024"
+  limiter: false
+  image_proxy: false
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_lang: "en"
+  formats:
+    - html
+    - json
+
+ui:
+  static_use_hash: true
+
+enabled_plugins:
+  - 'Tracker URL remover'
+
+engines:
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
+    disabled: false
+
+  - name: google
+    engine: google
+    shortcut: go
+    disabled: false
+
+  - name: bing
+    engine: bing
+    shortcut: bi
+    disabled: false
+
+  - name: google news
+    engine: google_news
+    shortcut: gon
+    disabled: false
+
+  - name: duckduckgo news
+    engine: duckduckgo_extra
+    categories: news
+    shortcut: ddn
+    disabled: false

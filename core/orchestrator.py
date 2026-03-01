@@ -5,6 +5,8 @@ from core.risk_manager import RiskManager
 from core.base_agent import BaseAgent
 from core.global_optimizer import SimpleRuleBasedOptimizer
 from core.broker_interface import BrokerInterface, TradeOrder
+from core.telegram_notifier import TelegramNotifier
+from core.llm_supervisor import LLMSupervisor
 
 class Orchestrator:
     """
@@ -17,6 +19,8 @@ class Orchestrator:
         self.risk_manager = RiskManager(self.config)
         self.optimizer = SimpleRuleBasedOptimizer()
         self.broker: Optional[BrokerInterface] = None
+        self.telegram = TelegramNotifier()
+        self.llm_supervisor = LLMSupervisor()
         
         self.capital_allocation = {}
         self.registered_agents: Dict[str, BaseAgent] = {}
@@ -30,6 +34,53 @@ class Orchestrator:
         """Sets the broker used for trade execution."""
         self.broker = broker
         self.logger.info(f"Broker connected: {type(broker).__name__}")
+
+    def run_llm_supervision(self, macro_sentiment: str, regime: str):
+        """
+        Triggers the LLM Supervisor to assess the market context and 
+        dynamically adjust RiskManager constraints.
+        """
+        if not self.llm_supervisor.enabled:
+            return
+
+        context = {
+            "macro_sentiment": macro_sentiment,
+            "regime": regime,
+            "daily_pnl": self.risk_manager.daily_pnl,
+            "global_drawdown": self.risk_manager.max_global_drawdown,  # Ideally current drawdown, but using threshold for now
+            "current_constraints": {
+                "max_leverage": self.risk_manager.max_leverage,
+                "max_position_size_pct": self.risk_manager.max_single_position_pct
+            }
+        }
+        
+        self.logger.info("🤖 Requesting Strategic Assessment from LLM Supervisor...")
+        decision = self.llm_supervisor.analyze_market_context(context)
+        
+        if decision:
+            reasoning = decision.get("reasoning", "")
+            summary = decision.get("executive_summary", "")
+            
+            # Apply dynamic constraints
+            if "max_leverage" in decision:
+                self.risk_manager.max_leverage = decision["max_leverage"]
+            if "max_position_size_pct" in decision:
+                self.risk_manager.max_single_position_pct = decision["max_position_size_pct"]
+            if decision.get("emergency_stop"):
+                self.risk_manager.set_emergency_stop(True)
+                
+            self.logger.info(f"LLM Supervisor Adjustments Applied: {decision}")
+            
+            # Broadcast to Telegram
+            alert_text = (
+                "<b>🧠 LLM SUPERVISOR UPDATE</b>\n\n"
+                f"<b>Summary:</b> {summary}\n"
+                f"<b>Reasoning:</b> {reasoning}\n\n"
+                f"<b>New Max Leverage:</b> {self.risk_manager.max_leverage}x\n"
+                f"<b>New Max Pos Size:</b> {self.risk_manager.max_single_position_pct * 100:.1f}%\n"
+                f"<b>Emergency Stop:</b> {self.risk_manager.emergency_stop}"
+            )
+            self.telegram._send_message(alert_text)
 
     def register_agent(self, agent_instance: BaseAgent):
         """Registers a specialized agent with the orchestrator."""
@@ -201,10 +252,22 @@ class Orchestrator:
                 f"✅ EXECUTED: {action} {order.qty} {order.symbol} @ ${order.price or 0:.2f} "
                 f"(score: {score:.2f}, agent: {result['source_agent']})"
             )
+            
+            # Send Telegram Alert
+            self.telegram.send_trade_alert(
+                symbol=order.symbol,
+                action=action,
+                quantity=order.qty,
+                price=order.price or 0.0,
+                strategy=result['source_agent'],
+                reason=reasoning
+            )
+            
             return result
             
         except Exception as e:
             self.logger.error(f"Trade execution failed: {e}")
+            self.telegram.send_error_alert("Orchestrator Trade Execution", str(e))
             return None
 
 if __name__ == "__main__":

@@ -12,10 +12,15 @@ class AlpacaBroker(BrokerInterface):
     Real/Paper Broker Adapter for Alpaca Markets.
     Requires APCA_API_KEY_ID and APCA_API_SECRET_KEY env vars.
     """
-    def __init__(self, paper: bool = True, authorized_tickers: List[str] = None):
+    def __init__(self, paper: Optional[bool] = None, authorized_tickers: List[str] = None):
         self.logger = logging.getLogger(__name__)
         self.authorized_tickers = authorized_tickers
         
+        # Default to ALPACA_LIVE env var if paper is not explicitly provided
+        if paper is None:
+            live_env = os.getenv("ALPACA_LIVE", "false").lower()
+            paper = False if live_env == "true" else True
+            
         self.api_key = os.getenv("APCA_API_KEY_ID")
         self.api_secret = os.getenv("APCA_API_SECRET_KEY")
         self.base_url = "https://paper-api.alpaca.markets" if paper else "https://api.alpaca.markets"
@@ -249,7 +254,7 @@ class AlpacaBroker(BrokerInterface):
         # 1. Fetch Stock Snapshots
         if stocks:
             try:
-                snapshots = self.api.get_snapshots(stocks)
+                snapshots = self.api.get_snapshots(stocks, feed='iex')
                 for symbol in stocks:
                     if symbol in snapshots and snapshots[symbol].latest_trade:
                         prices[symbol] = float(snapshots[symbol].latest_trade.price)
@@ -268,6 +273,46 @@ class AlpacaBroker(BrokerInterface):
                 self.logger.error(f"Alpaca Crypto Fetch Failed for {symbol}: {e}")
                     
         return prices
+
+    def get_latest_quotes(self, symbols: List[str]) -> Dict[str, Dict[str, float]]:
+        """
+        Fetches real-time Bid/Ask sizes for Order Flow Imbalance logic.
+        """
+        if not symbols:
+            return {}
+            
+        quotes_data = {}
+        stocks = [s for s in symbols if "/" not in s]
+        cryptos = [s for s in symbols if "/" in s]
+        
+        # 1. Fetch Stock Snapshots for Volume
+        if stocks:
+            try:
+                snapshots = self.api.get_snapshots(stocks, feed='iex')
+                for symbol in stocks:
+                    if symbol in snapshots and snapshots[symbol].latest_quote:
+                        q = snapshots[symbol].latest_quote
+                        quotes_data[symbol] = {
+                            'bid_size': float(getattr(q, 'bid_size', 0.0)),
+                            'ask_size': float(getattr(q, 'ask_size', 0.0))
+                        }
+            except Exception as e:
+                self.logger.error(f"Alpaca Stock Quotes Failed: {e}")
+                
+        # 2. Fetch Crypto Quotes
+        for symbol in cryptos:
+            try:
+                quotes = self.api.get_latest_crypto_quotes([symbol])
+                if symbol in quotes:
+                    q = quotes[symbol]
+                    quotes_data[symbol] = {
+                        'bid_size': float(getattr(q, 'bid_size', 0.0)),
+                        'ask_size': float(getattr(q, 'ask_size', 0.0))
+                    }
+            except Exception as e:
+                self.logger.warning(f"Alpaca Crypto Quote Fetch Failed for {symbol}: {e}")
+                
+        return quotes_data
 
     def get_historical_data(self, symbol: str, start: Optional[datetime] = None, end: Optional[datetime] = None, timeframe: str = '1Min', limit: Optional[int] = None) -> List[Any]:
         """
@@ -295,7 +340,7 @@ class AlpacaBroker(BrokerInterface):
                 bars = bars_obj.df if hasattr(bars_obj, 'df') else bars_obj
             else:
                 # Stock bars
-                bars = self.api.get_bars(symbol, tf, start_str, end_str, adjustment='all').df
+                bars = self.api.get_bars(symbol, tf, start_str, end_str, adjustment='all', feed='iex').df
             
             if limit and not bars.empty:
                 bars = bars.tail(limit)

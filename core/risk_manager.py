@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import Dict, Optional
 from datetime import datetime
 
@@ -12,8 +13,12 @@ class RiskManager:
         self.max_daily_loss = config.get('risk', {}).get('max_daily_loss', 1000.0)
         self.max_leverage = config.get('risk', {}).get('max_leverage', 1.0)
         self.max_drawdown_pct = config.get('risk', {}).get('max_drawdown_percent', 0.02)
+        self.max_global_drawdown = self.max_drawdown_pct
         
         self.current_daily_loss = 0.0
+        self.daily_pnl = 0.0
+        self.max_single_position_pct = 0.15
+        self.emergency_stop = False
         self.is_halted = False
         self.logger = logging.getLogger(__name__)
 
@@ -30,6 +35,11 @@ class RiskManager:
         """
         if self.is_halted:
             self.logger.warning("Risk Manager: System is HALTED. Trade rejected.")
+            return False
+
+        # 0. Check OpenClaw Veto Lock
+        if os.path.exists("data/openclaw_veto.lock"):
+            self.logger.critical("🚨 [VETO] Trade rejected: OpenClaw has active VETO power over the system.")
             return False
 
         # 1. Check Max Daily Loss
@@ -80,3 +90,8 @@ class RiskManager:
         new_gross_exposure = abs(current_market_value) + trade_value
         
         return new_gross_exposure / total_equity if total_equity > 0 else 999.0
+
+    def set_emergency_stop(self, state: bool):
+        self.emergency_stop = state
+        self.is_halted = state
+        self.logger.info(f"RiskManager: Emergency stop set to {state}")

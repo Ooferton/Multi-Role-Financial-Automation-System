@@ -10,8 +10,8 @@ import pytz
 from datetime import datetime
 
 # Page Config
-st.set_page_config(page_title="Sentience | Financial AI Dashboard", layout="wide", page_icon="🤖")
-st.title("🤖 Sentience Central | Financial AI Orchestrator")
+st.set_page_config(page_title="Sentience V3 | MARL Swarm Dashboard", layout="wide", page_icon="🧠")
+st.title("🧠 Sentience V3 | MARL Swarm Orchestrator")
 
 # 1. Load Data/Config
 db_path = "data/feature_store.db"
@@ -34,14 +34,25 @@ def load_sentience_status():
         except: pass
     return {}
 
-def load_bitcoin_status():
-    bit_status_path = "data/sentience_bitcoin.json"
-    if os.path.exists(bit_status_path):
+def load_swarm_status():
+    """Load MARL Swarm status for all sector agents."""
+    swarm_path = "data/swarm_status.json"
+    if os.path.exists(swarm_path):
         try:
-            with open(bit_status_path, "r", encoding="utf-8", errors="replace") as f:
+            with open(swarm_path, "r", encoding="utf-8", errors="replace") as f:
                 return json.load(f)
         except: pass
     return {}
+
+def get_v3_model_info():
+    """Check if V3 model is present and return metadata."""
+    v3_path = "ml/models/ppo_v3_cyborg.zip"
+    if os.path.exists(v3_path):
+        size_mb = os.path.getsize(v3_path) / (1024 * 1024)
+        mtime = os.path.getmtime(v3_path)
+        trained_at = datetime.fromtimestamp(mtime).strftime("%m/%d %H:%M")
+        return {"loaded": True, "size_mb": round(size_mb, 1), "trained_at": trained_at}
+    return {"loaded": False}
 
 def load_ai_journal():
     if os.path.exists(journal_path):
@@ -89,7 +100,8 @@ def get_all_symbols():
 
 config = load_config()
 sentience = load_sentience_status()
-bit_sentience = load_bitcoin_status()
+swarm_status = load_swarm_status()
+v3_info = get_v3_model_info()
 all_symbols = get_all_symbols()
 
 # 2. Sidebar Controls
@@ -113,7 +125,7 @@ if not is_triggered:
         # 2. Attempt Liquidation
         try:
             from agents.alpaca_broker import AlpacaBroker
-            b = AlpacaBroker(paper=True)
+            b = AlpacaBroker()
             b.liquidate_all()
             st.sidebar.success("SENTIENCE HALTED. All positions closed.")
         except Exception as e:
@@ -134,24 +146,45 @@ else:
 col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
     portfolio_active = sentience.get("active", False)
-    st.metric("Portfolio Runner", "ACTIVE" if portfolio_active else "OFFLINE", 
+    st.metric("🤖 MARL Swarm", "ACTIVE" if portfolio_active else "OFFLINE",
               delta=f"PID {sentience.get('pid', 'N/A')}" if portfolio_active else None)
 with col2:
-    bit_active = bit_sentience.get("active", False)
-    st.metric("BitRunner (Fast)", "ACTIVE" if bit_active else "OFFLINE", 
-              delta=f"PID {bit_sentience.get('pid', 'N/A')}" if bit_active else None,
-              delta_color="normal")
+    if v3_info["loaded"]:
+        st.metric("🧠 V3 Model", "LOADED",
+                  delta=f"{v3_info['size_mb']} MB | {v3_info['trained_at']}")
+    else:
+        st.metric("🧠 V3 Model", "NOT FOUND", delta="Run train_v3.py", delta_color="inverse")
 with col3:
     vibe = sentience.get("vibe", "Neutral")
-    st.metric("Economic Vibe", vibe)
+    st.metric("📊 Economic Vibe", vibe)
 with col4:
     sentiment = sentience.get("news_sentiment", 0)
     verdict = sentience.get("news_verdict", "Neutral")
-    st.metric("News Sentiment", f"{verdict}", delta=f"{sentiment:.2f}")
+    st.metric("📰 News Sentiment", f"{verdict}", delta=f"{sentiment:.2f}")
 with col5:
     full_trades = load_trades()
     total_trades = len(full_trades) if not full_trades.empty else 0
-    st.metric("Total Trades", total_trades)
+    st.metric("💼 Total Trades", total_trades)
+
+# 2b. MARL Swarm Sector Overview
+st.divider()
+swarm_cols = st.columns(5)
+sectors = [
+    ("💻 TECH",    ["AAPL", "MSFT", "NVDA", "GOOGL", "AMD"]),
+    ("🏦 FINANCE", ["JPM", "BAC", "GS", "V", "MA"]),
+    ("🏥 HEALTH",  ["JNJ", "UNH", "PFE", "LLY", "MRK"]),
+    ("🛢️ ENERGY",  ["XOM", "CVX", "COP", "SLB", "LIN"]),
+    ("₿ CRYPTO",  ["BTC/USD", "ETH/USD", "DOGE/USD", "COIN", "MSTR"]),
+]
+for i, (sector_name, tickers) in enumerate(sectors):
+    with swarm_cols[i]:
+        # Compute trade count for this sector
+        sector_trades = 0
+        if not full_trades.empty and 'symbol' in full_trades.columns:
+            sector_trades = full_trades[full_trades['symbol'].isin(tickers)].shape[0]
+        # Allocation from swarm_status if available
+        alloc = swarm_status.get(sector_name.split()[-1], {}).get("allocation", "—")
+        st.metric(sector_name, f"{sector_trades} trades", delta=f"Alloc: {alloc}")
 
 st.divider()
 
@@ -241,20 +274,26 @@ with side_col:
     if sentience.get("macro_summary"):
         st.info(f"**Economist Outlook:** {sentience['macro_summary']}")
 
-    st.subheader("📡 Live Agent Activity")
-    # Merge pulses from both runners
-    p1 = sentience.get("pulse", {})
-    p2 = bit_sentience.get("pulse", {})
-    combined_pulse = {**p1, **p2}
+    st.subheader("📡 MARL Swarm Activity")
+    combined_pulse = sentience.get("pulse", {})
+    
+    crypto_symbols  = {"BTC/USD", "ETH/USD", "DOGE/USD", "IBIT", "BITO", "COIN", "MSTR", "MARA", "RIOT"}
+    finance_symbols = {"JPM", "BAC", "WFC", "C", "GS", "MS", "V", "MA", "AXP", "BLK"}
+    health_symbols  = {"JNJ", "UNH", "PFE", "ABBV", "TMO", "MRK", "DHR", "LLY"}
+    energy_symbols  = {"XOM", "CVX", "COP", "SLB", "LIN", "NEM"}
+    
+    def get_sector(sym):
+        if sym in crypto_symbols:  return "₿ CRYPTO"
+        if sym in finance_symbols: return "🏦 FINANCE"
+        if sym in health_symbols:  return "🏥 HEALTH"
+        if sym in energy_symbols:  return "🛢️ ENERGY"
+        return "💻 TECH"
     
     if combined_pulse:
         pulse_data = []
         for sym, data in combined_pulse.items():
-            # Tag system source
-            bit_assets = ["BTC/USD", "ETH/USD", "DOGE/USD", "IBIT", "BITO", "FBTC", "ARKB", "HODL", "COIN", "MSTR", "MARA", "RIOT"]
-            source = "BitRunner" if sym in bit_assets else "Portfolio"
             pulse_data.append({
-                "System": source,
+                "Sector": get_sector(sym),
                 "Symbol": sym,
                 "Status": data.get("status"),
                 "Detail": data.get("detail"),

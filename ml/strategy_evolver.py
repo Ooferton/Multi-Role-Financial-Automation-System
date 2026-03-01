@@ -20,17 +20,17 @@ class StrategyGenome:
     Every field has a safe min/max to prevent catastrophic self-modification.
     """
     # --- Signal Thresholds ---
-    buy_threshold: float = 0.2       # Action value above this triggers BUY
-    sell_threshold: float = -0.2     # Action value below this triggers SELL
+    buy_threshold: float = 0.15       # Action value above this triggers BUY (was 0.2)
+    sell_threshold: float = -0.15     # Action value below this triggers SELL (was -0.2)
     
     # --- Position Sizing ---
-    max_position_pct: float = 0.05    # Max % of cash per trade
-    conviction_multiplier: float = 1.0  # Scales position by conviction
+    max_position_pct: float = 0.20    # Max % of cash per trade (was 0.05, increased for aggressive swing)
+    conviction_multiplier: float = 1.5  # Scales position by conviction (was 1.0)
     
     # --- Risk Management ---
-    stop_loss_pct: float = 0.05      # Exit if position drops this much
-    take_profit_pct: float = 0.10    # Exit if position gains this much
-    max_drawdown_pct: float = 0.15   # Pause trading if drawdown exceeds this
+    stop_loss_pct: float = 0.08      # Exit if position drops this much (was 0.05, widened for swing)
+    take_profit_pct: float = 0.15    # Exit if position gains this much (was 0.10)
+    max_drawdown_pct: float = 0.25   # Pause trading if drawdown exceeds this (was 0.15)
     
     # --- Indicator Weights (how much each factor matters) ---
     rsi_weight: float = 1.0

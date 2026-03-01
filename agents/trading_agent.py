@@ -46,6 +46,11 @@ class TradingAgent(BaseAgent):
         self.strategies.append(strategy)
         self.logger.info(f"Strategy added to {self.name}: {strategy.name}")
 
+    def clear_strategies(self):
+        """Removes all active strategies."""
+        self.strategies = []
+        self.logger.info(f"All strategies cleared from {self.name}.")
+
     def update_market_state(self, market_data: Dict[str, Any]):
         """
         Receives market data from Orchestrator or Feed.

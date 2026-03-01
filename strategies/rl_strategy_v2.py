@@ -23,6 +23,7 @@ from agents.risk_manager import RiskManager
 from agents.sentinel import Sentinel
 from ml.news_sentiment import NewsSentimentEngine
 from agents.economist_agent import EconomistAgent
+from ml.quant_models import calculate_kelly_fraction
 
 class RLStrategyV2(TradingStrategy):
     """
@@ -83,6 +84,8 @@ class RLStrategyV2(TradingStrategy):
         self._cached_summary = {}
         self._cached_positions = []
         
+        self.trade_history_pnl = [] # Track PnL for Kelly Sizing
+        
         self.logger.info(f"Strategy v2 initialized with genome:\n{self.evolver.get_status()}")
         
         # Determine status file path based on mode
@@ -125,7 +128,9 @@ class RLStrategyV2(TradingStrategy):
             'close': price,
             'high': price,
             'low': price,
-            'volume': tick.size
+            'volume': tick.size,
+            'bid_size': getattr(tick, 'bid_size', 0.0),
+            'ask_size': getattr(tick, 'ask_size', 0.0)
         })
         
         if len(self.history_buffers[symbol]) > 300:
@@ -238,7 +243,7 @@ class RLStrategyV2(TradingStrategy):
         severity = self.economist.get_crisis_severity()
 
         # 8. Construct 14-dim Observation Vector (10 weighted indicators)
-        obs = np.array([
+        obs_base = [
             price, ret,
             indicators['rsi_14'] * genome.rsi_weight,
             indicators['macd'] * genome.macd_weight,
@@ -252,7 +257,53 @@ class RLStrategyV2(TradingStrategy):
             indicators['atr_norm'] * genome.atr_weight,
             indicators['obv_norm'] * genome.obv_weight,
             float(current_qty), float(cash)
-        ], dtype=np.float32)
+        ]
+        
+        expected_obs_dim = 14
+        if self.agent.model and hasattr(self.agent.model.observation_space, 'shape'):
+            expected_obs_dim = self.agent.model.observation_space.shape[0]
+
+        if expected_obs_dim >= 22:
+            # 10. Hearing Layer: News Sentiment (V3 NLP state)
+            sentiment_label = self.news_engine.get_sentiment(tick.symbol)
+            sentiment_score = 0.0
+            if "BULLISH" in sentiment_label: sentiment_score = 0.8
+            elif "BEARISH" in sentiment_label: sentiment_score = -0.8
+            
+            # V3 Regime State using existing indicators
+            current_vol = indicators['atr_norm']
+            is_bull, is_bear, is_choppy = 0.0, 0.0, 1.0
+            if 'sma_200' in current_row:
+                sma_200 = current_row['sma_200']
+                if price > sma_200 and current_vol < 0.02:
+                    is_bull = 1.0; is_choppy = 0.0
+                elif price < sma_200 and current_vol > 0.02:
+                    is_bear = 1.0; is_choppy = 0.0
+            
+            # Simulated LLM Risk Constraints from Risk Manager
+            max_leverage = getattr(self.risk_manager, 'max_leverage', 1.0)
+            max_position_frac = getattr(self.risk_manager, 'max_portfolio_risk', 0.1)
+            allow_shorting = 1.0 # default
+            in_crisis = 1.0 if severity == "CRITICAL" else 0.0
+            
+            # Order Flow Imbalance
+            bid_size = current_row.get('bid_size', 0.0)
+            ask_size = current_row.get('ask_size', 0.0)
+            if (bid_size + ask_size) > 0:
+                ofi = (bid_size - ask_size) / (bid_size + ask_size)
+            else:
+                ofi = 0.0
+            
+            v3_features = [
+                in_crisis, max_leverage, max_position_frac, allow_shorting,
+                sentiment_score, is_bull, is_bear, is_choppy
+            ]
+            if expected_obs_dim == 23:
+                v3_features.append(ofi)
+                
+            obs_base.extend(v3_features)
+
+        obs = np.array(obs_base, dtype=np.float32)
         
         # 9. Sentience Check: Sentinel (Safety)
         safety = self.sentinel.check_safety(tick.symbol, indicators, crisis_severity=severity)
@@ -268,7 +319,7 @@ class RLStrategyV2(TradingStrategy):
                 return self._close_position(tick.symbol, price, current_qty, "BLACK SWAN EXIT")
             return None
 
-        # 10. Hearing Layer: News Sentiment
+        # 10. Hearing Layer: News Sentiment (Already calculated above for V3, but we keep it here for Dashboard export logic)
         sentiment = self.news_engine.get_sentiment(tick.symbol)
         
         # 11.5 Always update dashboard sentience metrics
@@ -364,7 +415,25 @@ class RLStrategyV2(TradingStrategy):
             trade_fraction *= 0.5
             reasoning.risk_notes.append("Macro sizing override: Half-size due to Risk-Off regime")
 
-        trade_value = buying_power * min(trade_fraction, 1.0) * genome.max_position_pct
+        # --- KELLY POSITION SIZING ---
+        # Instead of fixed genome.max_position_pct, we calculate Kelly Fraction
+        if len(self.trade_history_pnl) >= 5:
+            wins = [p for p in self.trade_history_pnl if p > 0]
+            losses = [p for p in self.trade_history_pnl if p <= 0]
+            
+            win_rate = len(wins) / len(self.trade_history_pnl)
+            avg_win = sum(wins) / len(wins) if wins else 0.01
+            avg_loss = abs(sum(losses) / len(losses)) if losses else 0.01
+            win_loss_ratio = avg_win / avg_loss
+            
+            # Half-Kelly for safety
+            kelly_pct = calculate_kelly_fraction(win_rate, win_loss_ratio, fraction_multiplier=0.5)
+            # Bound it between a minimum 2% risk and genome max
+            base_risk = max(0.02, min(genome.max_position_pct, kelly_pct))
+        else:
+            base_risk = genome.max_position_pct
+
+        trade_value = buying_power * min(trade_fraction, 1.0) * base_risk
         
         # --- BUYING POWER RESERVATION ---
         # Portfolio Mode (Standard Stocks) must leave at least $15 for Crypto Mode.
@@ -393,11 +462,20 @@ class RLStrategyV2(TradingStrategy):
             return None
         
         # 14. Sentience Check: Risk Manager (Veto/Resize)
+        sector = self.name.split('_')[-1] if '_' in self.name else None
+        
         risk_review = self.risk_manager.review_trade(
-            symbol=tick.symbol, action="BUY" if action_val > 0 else "SELL",
-            quantity=quantity, price=price, portfolio=summary,
-            current_drawdown=current_drawdown,
-            crisis_severity=severity
+            symbol=tick.symbol,
+            action=action_str,
+            quantity=quantity,
+            price=price,
+            portfolio={
+                'equity': getattr(self.risk_manager, 'total_equity', 100000), 
+                'positions': {tick.symbol: current_qty}
+            },
+            current_drawdown=0.0,
+            crisis_severity=1.0 if severity == "CRITICAL" else 0.0,
+            sector=sector
         )
         
         if not risk_review["approved"]:
@@ -466,15 +544,19 @@ class RLStrategyV2(TradingStrategy):
             
         return None
     
-    def _record_win(self):
+    def _record_win(self, pnl_pct: float):
         self.trade_count += 1
         self.win_count += 1
         self.consecutive_losses = 0
+        self.trade_history_pnl.append(pnl_pct)
+        if len(self.trade_history_pnl) > 50: self.trade_history_pnl.pop(0)
     
-    def _record_loss(self):
+    def _record_loss(self, pnl_pct: float):
         self.trade_count += 1
         self.loss_count += 1
         self.consecutive_losses += 1
+        self.trade_history_pnl.append(pnl_pct)
+        if len(self.trade_history_pnl) > 50: self.trade_history_pnl.pop(0)
     
     def self_adapt(self):
         """Called periodically to let the AI evolve its own strategy."""
@@ -519,15 +601,17 @@ class RLStrategyV2(TradingStrategy):
         # If we were SHORT, we BUY.
         if side == 'LONG':
             is_win = price > entry_price
+            pnl_pct = (price - entry_price) / entry_price
             action = "SELL"
         else: # SHORT
             is_win = price < entry_price
+            pnl_pct = (entry_price - price) / entry_price
             action = "BUY"
             
         if is_win:
-            self._record_win()
+            self._record_win(pnl_pct)
         else:
-            self._record_loss()
+            self._record_loss(pnl_pct)
             
         self.live_activity[symbol] = {
             "status": f"EXIT ({reason})",

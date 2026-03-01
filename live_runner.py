@@ -12,10 +12,12 @@ from agents.trading_agent import TradingAgent
 from agents.alpaca_broker import AlpacaBroker
 from agents.coinbase_broker import CoinbaseBroker
 from strategies.rl_strategy_v2 import RLStrategyV2
-from strategies.hft import HFTStrategy
+from strategies.swing import SwingStrategy
 from core.orchestrator import Orchestrator
 from data.feature_store import FeatureStore, MarketTick
 from agents.mock_broker import MockBroker
+from ml.quant_models import estimate_regime, calculate_risk_parity_weights
+from data.searxng_search import SearXNGClient
 import pytz
 import argparse
 
@@ -30,7 +32,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("LiveRunner")
 
-def run_warmup(broker, agent, feature_store, symbols):
+def run_warmup(broker, agent_swarm, feature_store, target_symbols_dict):
     """Fetches historical data to prime the agent and dashboard."""
     logger.info("Starting Historical Warmup (Last 100 bars within 72-hour window)...")
     
@@ -39,42 +41,43 @@ def run_warmup(broker, agent, feature_store, symbols):
     end = datetime.now()
     
     total_bars = 0
-    for symbol in symbols:
-        # Emergency Circuit Breaker Check (Inside Warmup)
-        if os.path.exists("data/circuit_breaker.lock"):
-            logger.critical(f"[CIRCUIT BREAKER] HALTING WARMUP for {symbol}!")
-            while os.path.exists("data/circuit_breaker.lock"):
-                time.sleep(2)
-            logger.info("[CIRCUIT BREAKER] Reset detected. Resuming warmup...")
-
-        try:
-            # Fetch last 100 bars from the window
-            bars = broker.get_historical_data(symbol, start=start, end=end, timeframe='1Min', limit=100)
-            if bars:
-                for bar in bars:
-                    # Save OHLC as separate ticks so dashboard resample can reconstruct candles
-                    # Use 1-second offsets to ensure uniqueness in SQLite PK (symbol, timestamp)
-                    for i, attr in enumerate(['open', 'high', 'low', 'close']):
-                        # Ensure bar.timestamp is UTC
-                        base_ts = bar.timestamp
-                        if base_ts.tzinfo is None:
-                            base_ts = pytz.UTC.localize(base_ts)
-                            
-                        tick = MarketTick(
-                            symbol=symbol,
-                            timestamp=base_ts + timedelta(seconds=i),
-                            price=getattr(bar, attr),
-                            size=bar.volume / 4.0,
-                            exchange="WARMUP"
-                        )
-                        if attr == 'close':
-                            agent.update_market_state({'tick': tick})
-                        feature_store.save_tick(tick)
-                total_bars += len(bars)
-        except Exception as e:
-            logger.error(f"Warmup failed for {symbol}: {e}")
+    for sector, symbols in target_symbols_dict.items():
+        for symbol in symbols:
+            # Emergency Circuit Breaker Check (Inside Warmup)
+            if os.path.exists("data/circuit_breaker.lock"):
+                logger.critical(f"[CIRCUIT BREAKER] HALTING WARMUP for {symbol}!")
+                while os.path.exists("data/circuit_breaker.lock"):
+                    time.sleep(2)
+                logger.info("[CIRCUIT BREAKER] Reset detected. Resuming warmup...")
+    
+            try:
+                # Fetch last 100 bars from the window
+                bars = broker.get_historical_data(symbol, start=start, end=end, timeframe='1Min', limit=100)
+                if bars:
+                    for bar in bars:
+                        # Save OHLC as separate ticks so dashboard resample can reconstruct candles
+                        # Use 1-second offsets to ensure uniqueness in SQLite PK (symbol, timestamp)
+                        for i, attr in enumerate(['open', 'high', 'low', 'close']):
+                            # Ensure bar.timestamp is UTC
+                            base_ts = bar.timestamp
+                            if base_ts.tzinfo is None:
+                                base_ts = pytz.UTC.localize(base_ts)
+                                
+                            tick = MarketTick(
+                                symbol=symbol,
+                                timestamp=base_ts + timedelta(seconds=i),
+                                price=getattr(bar, attr),
+                                size=bar.volume / 4.0,
+                                exchange="WARMUP"
+                            )
+                            if attr == 'close':
+                                agent_swarm[sector].update_market_state({'tick': tick})
+                            feature_store.save_tick(tick)
+                    total_bars += len(bars)
+            except Exception as e:
+                logger.error(f"Warmup failed for {symbol}: {e}")
             
-    logger.info(f"Warmup complete. Ingested {total_bars} historical data points across {len(symbols)} symbols.")
+    logger.info(f"Warmup complete. Ingested {total_bars} historical data points across sectors.")
 
 def start_dashboard():
     """Launches the Streamlit dashboard in the background."""
@@ -138,8 +141,8 @@ def main():
     broker_name = orchestrator.config.get('brokerage', {}).get('name', 'MOCK')
     
     if broker_name == "ALPACA" and os.getenv("APCA_API_KEY_ID"):
-        logger.info("Initializing Alpaca Broker (Paper Trading)...")
-        broker = AlpacaBroker(paper=True)
+        logger.info("Initializing Alpaca Broker...")
+        broker = AlpacaBroker()
     elif broker_name == "COINBASE":
         logger.info("Initializing Coinbase Broker (Crypto)...")
         broker = CoinbaseBroker()
@@ -164,11 +167,163 @@ def main():
     # Feature Store (for logging history if needed)
     feature_store = FeatureStore(db_path="data/feature_store.db")
     
-    # Agent
-    agent = TradingAgent("Live_RL_Agent_v2", {}, feature_store, broker)
+    target_symbols_dict = {
+        "INDEX": ["SPY", "QQQ", "DIA", "IWM", "SQQQ", "UVXY"],
+        "TECH": ["AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "META", "GOOGL", "AVGO", "COST", "ORCL", "CRM", "ADBE", "PLTR", "RTX", "TSM", "MU", "CSCO", "INTC", "AMD", "IBM", "XLK", "XLC"],
+        "FINANCE": ["BAC", "JPM", "WFC", "C", "BLK", "GS", "MS", "AXP", "MA", "V", "XLF"],
+        "BONDS": ["TLT", "IEF", "IEI", "SHY", "BND", "AGG", "TIP"],
+        "INDUSTRIALS": ["CAT", "GE", "BA", "LMT", "NOC", "HON", "XOM", "CVX", "XLE", "XLI", "XLB"],
+        "CONSUMER": ["KO", "PEP", "MCD", "NKE", "SBUX", "HD", "LOW", "JNJ", "PFE", "UNH", "DIS", "XLY", "XLP", "XLV"],
+        "CRYPTO": ["BTC/USD", "ETH/USD", "IBIT", "BITO"]
+    }
     
-    # Strategy — PPO Trading Real v2 (10 indicators)
-    model_path = "ml/models/ppo_trading_real_v2"
+    flat_symbols = [symbol for sector in target_symbols_dict.values() for symbol in sector]
+    
+    # Swarm Agent Initialization
+    agent_swarm = {
+        sector: TradingAgent(f"Live_Swarm_{sector}", {}, feature_store, broker) 
+        for sector in target_symbols_dict.keys()
+    }
+    
+    # --- DYNAMIC STRATEGY LOADING ---
+    STRATEGY_CONFIG_PATH = "data/active_strategies.json"
+    
+    def get_market_data_for_regime_and_parity(target_symbol="SPY"):
+        try:
+            logger.info(f"📊 Calculating Market Regime & Risk Parity...")
+            # Fetch 100 days of daily data for SPY (Regime + CVaR) and QQQ, TLT (for parity example)
+            start = datetime.now() - timedelta(days=150)
+            bars = broker.get_historical_data(target_symbol, start=start, end=datetime.now(), timeframe='1Day', limit=100)
+            if not bars: return 'UNKNOWN', 'NEUTRAL', None
+            
+            closes = [b.close for b in bars]
+            returns = pd.Series(closes).pct_change().dropna().values
+            regime = estimate_regime(returns)
+            
+            # Augment with Live News Sentiment
+            search_client = SearXNGClient()
+            macro_sentiment = search_client.get_macro_sentiment()
+            
+            # If news is highly bearish but chart says bull, we might want to downgrade to choppy
+            if macro_sentiment == "BEARISH_MACRO" and regime == "BULL":
+                logger.warning("Brave Search detected heavy BEARISH news. Downgrading BULL regime to CHOPPY.")
+                regime = "CHOPPY"
+            elif macro_sentiment == "BULLISH_MACRO" and regime in ["CHOPPY", "BEAR"]:
+                logger.info("Brave Search detected strong BULLISH news. Market fundamentals improving.")
+            
+            
+            # Send SPY returns to Risk Manager for Proxy Market CVaR
+            orchestrator.risk_manager.check_portfolio_risk(returns.tolist())
+            
+            logger.info(f"Current Market Regime: {regime}")
+            return regime, macro_sentiment, returns
+        except Exception as e:
+            logger.error(f"Failed to estimate regime: {e}")
+            return 'UNKNOWN', 'NEUTRAL', None
+            
+    def update_risk_parity(broker, target_symbols, orchestrator):
+        try:
+            logger.info("⚖️ Calculating Risk Parity (Inverse Volatility) Caps...")
+            # We take a sample basket (Top 10) to save API calls in testing
+            subset = target_symbols[:10]
+            returns_dict = {}
+            start = datetime.now() - timedelta(days=60)
+            
+            for sym in subset:
+                bars = broker.get_historical_data(sym, start=start, end=datetime.now(), timeframe='1Day', limit=60)
+                if bars:
+                    returns_dict[sym] = [b.close for b in bars]
+            
+            if not returns_dict: return
+            
+            # Align lengths
+            min_len = min([len(v) for v in returns_dict.values()])
+            if min_len < 10: return
+            
+            df = pd.DataFrame({k: pd.Series(v[-min_len:]).pct_change().dropna().values for k, v in returns_dict.items()})
+            weights = calculate_risk_parity_weights(df)
+            orchestrator.risk_manager.set_parity_weights(weights)
+        except Exception as e:
+            logger.error(f"Failed to update risk parity: {e}")
+            
+    def update_swarm_allocations(broker, target_symbols_dict, orchestrator):
+        try:
+            logger.info("🧠 Meta-Orchestrator: Calculating Swarm Capital Allocations (Sharpe-based)...")
+            allocations = {}
+            start = datetime.now() - timedelta(days=60)
+            
+            for sector, symbols in target_symbols_dict.items():
+                if not symbols: continue
+                # Use first symbol as proxy for sector performance
+                proxy = symbols[-1] if 'XL' in symbols[-1] else symbols[0] 
+                bars = broker.get_historical_data(proxy, start=start, end=datetime.now(), timeframe='1Day', limit=60)
+                if not bars: 
+                    allocations[sector] = 1.0
+                    continue
+                
+                returns = pd.Series([b.close for b in bars]).pct_change().dropna()
+                sharpe = (returns.mean() / returns.std()) * np.sqrt(252) if returns.std() != 0 else 0.5
+                allocations[sector] = max(0.1, sharpe) # Floor at 0.1
+                
+            # Normalize allocations around 1.0 (mean)
+            avg_sharpe = sum(allocations.values()) / len(allocations) if allocations else 1.0
+            if avg_sharpe == 0: avg_sharpe = 1.0
+            
+            normalized_allocations = {s: v / avg_sharpe for s, v in allocations.items()}
+            # Cap the multiplier (0.5 to 1.5 multiplier)
+            normalized_allocations = {s: max(0.5, min(1.5, v)) for s, v in normalized_allocations.items()}
+            
+            orchestrator.risk_manager.set_sector_allocations(normalized_allocations)
+            logger.info(f"Swarm Allocations Updated: {normalized_allocations}")
+            
+        except Exception as e:
+            logger.error(f"Failed to update Swarm Allocations: {e}")
+    
+    
+    def load_active_strategies(target_swarm, regime='UNKNOWN'):
+        preset = "auto"
+        if os.path.exists(STRATEGY_CONFIG_PATH):
+            try:
+                with open(STRATEGY_CONFIG_PATH, "r") as f:
+                    config = json.load(f)
+                    preset = config.get("preset", "auto")
+            except: pass
+            
+        if preset == "auto":
+            if regime == "BULL":
+                preset = "aggressive"
+            elif regime == "BEAR":
+                preset = "conservative" 
+            else:
+                preset = "conservative" # CHOPPY gets conservative
+        
+        logger.info(f"🧬 Loading Strategy Preset: {preset.upper()} (Regime: {regime})")
+        
+        for sector, agent in target_swarm.items():
+            agent.clear_strategies()
+            
+            # [Strategy 1] RL Brain (Always active in conservative/aggressive)
+            if preset in ["conservative", "aggressive"]:
+                model_path = "ml/models/ppo_v3_cyborg" # Try V3 First
+                if not os.path.exists(model_path + ".zip") and not os.path.exists(model_path):
+                    model_path = "ml/models/ppo_trading_real_v2" # Fallback to V2
+                
+                rl_strat = RLStrategyV2(f"RL_{sector}", orchestrator.config, broker, model_path.replace(".zip",""))
+                agent.add_strategy(rl_strat)
+
+            # [Strategy 2] Swing Trading (Aggressive only)
+            if preset in ["aggressive", "swing_only"]:
+                swing_strat = SwingStrategy(f"Swing_{sector}", {"window_size": 24}, broker)
+                agent.add_strategy(swing_strat)
+
+    # Initial Load
+    current_regime, current_macro, _ = get_market_data_for_regime_and_parity("SPY")
+    orchestrator.run_llm_supervision(current_macro, current_regime)
+    update_risk_parity(broker, flat_symbols, orchestrator)
+    update_swarm_allocations(broker, target_symbols_dict, orchestrator)
+    load_active_strategies(agent_swarm, regime=current_regime)
+    _last_strat_check = os.path.getmtime(STRATEGY_CONFIG_PATH) if os.path.exists(STRATEGY_CONFIG_PATH) else 0
+    _last_regime_check = time.time()
     
     # Broadcast INITIAL state immediately
     try:
@@ -181,71 +336,10 @@ def main():
                 "timestamp": datetime.now().isoformat()
             }, f)
     except: pass
-
-    # Wait for model if not ready
-    while not os.path.exists(model_path + ".zip") and not os.path.exists(model_path):
-        logger.info("Waiting for model file...")
-        time.sleep(10)
-
-    strategy = RLStrategyV2("RL_Brain_v2", orchestrator.config, broker, model_path.replace(".zip",""))
-    agent.add_strategy(strategy)
     
-    # HFT Strategy
-    hft_strategy = HFTStrategy("HFT_Momentum", {"window_size": 20}, broker)
-    agent.add_strategy(hft_strategy)
-    
-    target_symbols = [
-        # Indices & Broad Market
-        "SPY", "QQQ", "DIA", "IWM", 
-        "SQQQ", "UVXY", # Crisis Alpha Hedge Tickers
-        
-        # Sector ETFs
-        "XLF", "XLK", "XLE", "XLV", "XLI", "XLB", "XLY", "XLP", "XLU", "XLC", "XLRE",
-        
-        # Treasury Bonds (ETFs)
-        "TLT", "IEF", "IEI", "SHY", "BND", "AGG", "TIP",
-
-        # Tech Titans & Growth
-        "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "META", "GOOGL", "GOOG", "AVGO", "COST", "ORCL", "CRM", "ADBE", "PLTR", "RTX", "TSM", "MU", "CSCO", "SNPS",
-        
-        # Finance & Value
-        "BAC", "JPM", "WFC", "C", "BLK", "GS", "MS", "AXP", "MA", "V", 
-        
-        # Industrials & Energy
-        "CAT", "GE", "BA", "LMT", "NOC", "XOM", "CVX", "HON", "GIS", 
-        
-        # Consumer & Healthcare
-        "KO", "PEP", "MCD", "NKE", "SBUX", "HD", "LOW", "JNJ", "PFE", "UNH", "DIS",
-    ]
-
-    # 1. Determine Asset Universe
-    target_symbols = [
-        # Indices & Broad Market
-        "SPY", "QQQ", "DIA", "IWM", 
-        "SQQQ", "UVXY", # Crisis Alpha Hedge Tickers
-        
-        # Sector ETFs
-        "XLF", "XLK", "XLE", "XLV", "XLI", "XLB", "XLY", "XLP", "XLU", "XLC", "XLRE",
-        
-        # Treasury Bonds (ETFs)
-        "TLT", "IEF", "IEI", "SHY", "BND", "AGG", "TIP",
-
-        # Tech Titans & Growth
-        "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "META", "GOOGL", "GOOG", "AVGO", "COST", "ORCL", "CRM", "ADBE", "PLTR", "RTX", "TSM", "MU", "CSCO", "SNPS",
-        
-        # Finance & Value
-        "BAC", "JPM", "WFC", "C", "BLK", "GS", "MS", "AXP", "MA", "V", 
-        
-        # Industrials & Energy
-        "CAT", "GE", "BA", "LMT", "NOC", "XOM", "CVX", "HON", "GIS", 
-        
-        # Consumer & Healthcare
-        "KO", "PEP", "MCD", "NKE", "SBUX", "HD", "LOW", "JNJ", "PFE", "UNH", "DIS"
-    ]
-
     # 2. Performance Warmup (Historical Data)
-    logger.info("Initializing Standard Portfolio Runner...")
-    run_warmup(broker, agent, feature_store, target_symbols)
+    logger.info("Initializing Sectoral Portfolio Swarm...")
+    run_warmup(broker, agent_swarm, feature_store, target_symbols_dict)
     
     try:
         while True:
@@ -269,35 +363,62 @@ def main():
                 while os.path.exists("data/circuit_breaker.lock"): time.sleep(2)
                 logger.info("[CIRCUIT BREAKER] Reset detected. Resuming operation...")
 
-            # 3. Fetch Latest Prices
-            prices = broker.get_latest_prices(target_symbols)
+            # 2. Check for Strategy Changes
+            if os.path.exists(STRATEGY_CONFIG_PATH):
+                mtime = os.path.getmtime(STRATEGY_CONFIG_PATH)
+                if mtime > _last_strat_check:
+                    logger.warning("🔔 Strategy Configuration Change Detected! Reloading Brain...")
+                    load_active_strategies(agent, regime=current_regime)
+                    _last_strat_check = mtime
+                    
+            # 2.5 Periodic Regime & Risk Check (Every 4 hours = 14400 secs)
+            if time.time() - _last_regime_check > 14400:
+                new_regime, recent_macro, _ = get_market_data_for_regime_and_parity("SPY")
+                orchestrator.run_llm_supervision(recent_macro, new_regime)
+                update_risk_parity(broker, flat_symbols, orchestrator)
+                update_swarm_allocations(broker, target_symbols_dict, orchestrator)
+                if new_regime != current_regime and new_regime != 'UNKNOWN':
+                    logger.warning(f"🚨 MARKET REGIME SHIFT DETECTED: {current_regime} -> {new_regime}")
+                    orchestrator.telegram.send_regime_shift(new_regime)
+                    current_regime = new_regime
+                    load_active_strategies(agent_swarm, regime=current_regime)
+                _last_regime_check = time.time()
+
+            # 3. Fetch Latest Prices & Quotes
+            prices = broker.get_latest_prices(flat_symbols)
+            quotes = broker.get_latest_quotes(flat_symbols)
             
-            for symbol in target_symbols:
-                # Secondary Emergency Check (During long loops)
-                if os.path.exists("data/circuit_breaker.lock"):
-                    break
-                
-                price = prices.get(symbol, 0.0)
-                
-                if price > 0:
-                    # 2. Create Tick
-                    tick = MarketTick(
-                        symbol=symbol,
-                        timestamp=datetime.now(),
-                        price=price,
-                        size=100, # Placeholder volume
-                        exchange=broker_name
-                    )
+            for sector, symbols in target_symbols_dict.items():
+                for symbol in symbols:
+                    # Secondary Emergency Check (During long loops)
+                    if os.path.exists("data/circuit_breaker.lock"):
+                        break
                     
-                    # 3. Update Agent (Predict & Execute)
-                    # This calls strategy.on_tick -> process_signal -> execute_instruction -> broker.submit
-                    agent.update_market_state({'tick': tick})
+                    price = prices.get(symbol, 0.0)
+                    quote = quotes.get(symbol, {})
+                    bid_size = quote.get('bid_size', 0.0)
+                    ask_size = quote.get('ask_size', 0.0)
                     
-                    # 3.5 Persist Tick for Dashboard Visualization
-                    feature_store.save_tick(tick)
-                    
-                else:
-                    logger.warning(f"Failed to fetch price for {symbol}.")
+                    if price > 0:
+                        # 2. Create Tick
+                        tick = MarketTick(
+                            symbol=symbol,
+                            timestamp=datetime.now(),
+                            price=price,
+                            size=100, # Placeholder volume
+                            exchange=broker_name,
+                            bid_size=bid_size,
+                            ask_size=ask_size
+                        )
+                        
+                        # 3. Update Swarm Agent (Predict & Execute)
+                        agent_swarm[sector].update_market_state({'tick': tick})
+                        
+                        # 3.5 Persist Tick for Dashboard Visualization
+                        feature_store.save_tick(tick)
+                        
+                    else:
+                        logger.warning(f"Failed to fetch price for {symbol}.")
 
             # 4. Exit if in one-shot mode
             if args.one_shot:

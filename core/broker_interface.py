@@ -70,6 +70,13 @@ class BrokerInterface(ABC):
         """
         pass
 
+    def get_latest_quotes(self, symbols: List[str]) -> Dict[str, Dict[str, float]]:
+        """
+        Fetches latest Level 1/1.5 quotes (bid_size, ask_size).
+        Optional method, defaults to returning empty data.
+        """
+        return {s: {'bid_size': 0.0, 'ask_size': 0.0} for s in symbols}
+
     @abstractmethod
     def get_historical_data(self, symbol: str, start: Optional[datetime] = None, end: Optional[datetime] = None, timeframe: str = '1Min', limit: Optional[int] = None) -> List[Any]:
         """
