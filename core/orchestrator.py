@@ -1,7 +1,7 @@
 import logging
 import yaml
 from typing import Dict, List, Optional
-from core.risk_manager import RiskManager
+from agents.risk_manager import RiskManager
 from core.base_agent import BaseAgent
 from core.global_optimizer import SimpleRuleBasedOptimizer
 from core.broker_interface import BrokerInterface, TradeOrder

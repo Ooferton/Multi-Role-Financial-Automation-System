@@ -22,7 +22,7 @@ risk:
   risk_envelope_active: true
   volatility_limit: 0.08
 system:
-  crypto_etf_only: false
+  crypto_etf_only: true
   log_level: INFO
   mode: PAPER
   timezone: US/Eastern

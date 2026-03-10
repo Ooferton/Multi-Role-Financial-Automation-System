@@ -38,8 +38,8 @@ class RiskManager:
             return False
 
         # 0. Check OpenClaw Veto Lock
-        if os.path.exists("data/openclaw_veto.lock"):
-            self.logger.critical("🚨 [VETO] Trade rejected: OpenClaw has active VETO power over the system.")
+        if os.path.exists("data/system_veto.lock"):
+            self.logger.critical("🚨 [VETO] Trade rejected: System VETO is active.")
             return False
 
         # 1. Check Max Daily Loss

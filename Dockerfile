@@ -7,7 +7,6 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
-    curl \
     git \
     procps \
     sed \
@@ -32,7 +31,6 @@ RUN mkdir -p data logs ml/models && \
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV OLLAMA_HOST=0.0.0.0
 
 # Expose port 7860
 EXPOSE 7860

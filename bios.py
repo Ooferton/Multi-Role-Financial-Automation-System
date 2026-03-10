@@ -1,9 +1,6 @@
 import os
 import sys
-import subprocess
 import logging
-import json
-from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,7 +20,7 @@ def check_step(name, condition, fix_hint=""):
     return condition
 
 def run_bios():
-    print(f"{CYAN}=== FINANCIAL SYSTEM BIOS v2.0 ==={RESET}")
+    print(f"{CYAN}=== FINANCIAL SYSTEM BIOS v3.0 ==={RESET}")
     print(f"Initializing hardware abstraction layer...")
     
     success = True
@@ -44,33 +41,8 @@ def run_bios():
     if not os.path.exists("data"):
         os.makedirs("data", exist_ok=True)
     check_step("Data Directory", True)
-    
-    # 4. Check OpenClaw Core
-    openclaw_home = os.path.expanduser("~/.openclaw")
-    openclaw_config = Path(f"{openclaw_home}/openclaw.json").exists()
-    
-    # Cloud Bootstrap: If missing but we have node, try to mkdir
-    if not openclaw_config and not os.name == 'nt':
-        os.makedirs(openclaw_home, exist_ok=True)
-        with open(f"{openclaw_home}/openclaw.json", "w") as f:
-            json.dump({"initialized": True}, f)
-        openclaw_config = True
 
-    if not check_step("OpenClaw Config", openclaw_config, "Run 'openclaw configure' or ensure ~/.openclaw exists."):
-        success = False
-
-    # 5. Check AI Services (Ollama)
-    ollama_ready = False
-    try:
-        import requests
-        res = requests.get("http://127.0.0.1:11434/api/tags", timeout=2)
-        ollama_ready = res.status_code == 200
-    except:
-        pass
-    if not check_step("Ollama Service", ollama_ready, "Ensure Ollama is running at http://127.0.0.1:11434"):
-        success = False
-
-    # 6. Check Python Dependencies
+    # 4. Check Python Dependencies
     deps_ready = True
     try:
         import pandas

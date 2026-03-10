@@ -1,12 +1,13 @@
 import os
 import sys
+import time
 
 def manage_veto(command):
-    lock_path = os.path.join(os.getcwd(), 'data', 'openclaw_veto.lock')
+    lock_path = os.path.join(os.getcwd(), 'data', 'system_veto.lock')
     
     if command == "halt":
         with open(lock_path, 'w') as f:
-            f.write("Vetoed by OpenClaw at " + os.popen('date /t').read().strip())
+            f.write(f"System vetoed at {time.ctime()}")
         print("SYSTEM VETOED. All future trades will be blocked until reset.")
     elif command == "resume":
         if os.path.exists(lock_path):

@@ -88,6 +88,11 @@ class RLStrategyV2(TradingStrategy):
         
         self.logger.info(f"Strategy v2 initialized with genome:\n{self.evolver.get_status()}")
         
+        # Phase 22: Self-Reinforcement Learning (Online Training)
+        self.live_experiences = []
+        self.pending_experiences = {} # symbol -> {obs, action}
+        self.train_batch_size = 10 # Train every 10 completed trades
+        
         # Determine status file path based on mode
         is_btm = config.get('system', {}).get('crypto_etf_only', False)
         self.status_path = "data/sentience_bitcoin.json" if is_btm else "data/sentience_status.json"
@@ -341,6 +346,13 @@ class RLStrategyV2(TradingStrategy):
         # 12. Ask the AI Agent
         action = self.agent.predict(obs)
         action_val = float(action[0])
+        
+        # 12.1 Store Observation and Action for Live Learning Buffer (Phase 22)
+        # We store it as pending. It will only become a full experience if the trade executes and closes.
+        self.pending_experiences[tick.symbol] = {
+            'obs': obs,
+            'action': action_val
+        }
 
         # LOUD DIAGNOSTICS for Bitcoin/ETF
         if symbol in ["BTC/USD", "IBIT", "BITO", "FBTC", "ARKB"]:
@@ -436,8 +448,9 @@ class RLStrategyV2(TradingStrategy):
         trade_value = buying_power * min(trade_fraction, 1.0) * base_risk
         
         # --- BUYING POWER RESERVATION ---
-        # Portfolio Mode (Standard Stocks) must leave at least $15 for Crypto Mode.
-        if not is_btm and buying_power < 15.00 and action_val > genome.buy_threshold:
+        # Portfolio Mode (Standard Stocks) normally leaves at least $15 for Crypto Mode.
+        # Bypass this for micro-accounts (< $100 equity) so they don't get frozen.
+        if not is_btm and buying_power < 15.00 and equity >= 100.0 and action_val > genome.buy_threshold:
             # Only log if we were actually planning to buy
             self.logger.info(f"🔇 [PORTFOLIO MODE] Standing down. Buying power ${buying_power:.2f} is below $15.00 Crypto Reserve.")
             return None
@@ -470,7 +483,7 @@ class RLStrategyV2(TradingStrategy):
             quantity=quantity,
             price=price,
             portfolio={
-                'equity': getattr(self.risk_manager, 'total_equity', 100000), 
+                'equity': equity, 
                 'positions': {tick.symbol: current_qty}
             },
             current_drawdown=0.0,
@@ -619,6 +632,32 @@ class RLStrategyV2(TradingStrategy):
             "timestamp": datetime.now().strftime("%H:%M:%S")
         }
         
+        # Phase 22: Log Completed Experience for Online Learning
+        pending = self.pending_experiences.pop(symbol, None)
+        if pending is not None:
+            # Reward: Clamped log-return scaling, similar to environment step
+            reward = float(np.clip(pnl_pct * 100, -10, 10))
+            self.live_experiences.append({
+                'obs': pending['obs'],
+                'action': pending['action'],
+                'reward': reward
+            })
+
+            # Trigger micro-batch training if buffer is full
+            if len(self.live_experiences) >= self.train_batch_size:
+                self.logger.info(f"🧠 [LIVE LEARNING] Triggering online PPO update with {len(self.live_experiences)} experiences...")
+                try:
+                    self.agent.train_on_live_experiences(self.live_experiences, epochs=2)
+                    # Persist the newly smarter brain to disk
+                    model_path = "ml/models/ppo_v3_cyborg"
+                    self.agent.save(model_path)
+                    self.logger.info(f"✅ Brain saved to {model_path}.")
+                except Exception as e:
+                    self.logger.error(f"❌ Live learning failed: {e}")
+                
+                # Clear buffer after training
+                self.live_experiences.clear()
+
         return {
             "action": action, "symbol": symbol,
             "quantity": abs(qty), 

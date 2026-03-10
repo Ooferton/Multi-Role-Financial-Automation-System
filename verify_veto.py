@@ -6,7 +6,7 @@ def test_veto():
     logging.basicConfig(level=logging.INFO)
     rm = RiskManager({})
     
-    lock_path = "data/openclaw_veto.lock"
+    lock_path = "data/system_veto.lock"
     
     print("\n--- VETO VERIFICATION TEST ---")
     

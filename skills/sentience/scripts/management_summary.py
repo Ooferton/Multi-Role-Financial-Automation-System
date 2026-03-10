@@ -29,7 +29,7 @@ def get_management_summary():
         except: pass
 
     # 3. Veto Status
-    veto_path = os.path.join(os.getcwd(), 'data', 'openclaw_veto.lock')
+    veto_path = os.path.join(os.getcwd(), 'data', 'system_veto.lock')
     veto_status = "ACTIVE (Trading Blocked)" if os.path.exists(veto_path) else "INACTIVE (Trading Allowed)"
 
     # Construct Output

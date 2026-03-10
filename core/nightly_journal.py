@@ -11,7 +11,7 @@ logger = logging.getLogger("NightlyJournal")
 
 class NightlyJournal:
     """
-    Tier 1 AI Process: Analyzes daily trades and writes a LEARNINGS.md summary using Gemini.
+    Tier 1 AI Process: Analyzes daily trades and writes a LEARNINGS.md summary using the LLM.
     """
     def __init__(self, trades_path="data/trades.csv", output_dir="logs/learnings"):
         self.trades_path = trades_path
@@ -70,8 +70,8 @@ class NightlyJournal:
         """
 
         try:
-            # We bypass the complex 'assess_regime' method and call Gemini directly for a raw response
-            response = self.llm._call_gemini_raw(prompt)
+            # Call the LLM supervisor for a raw text response
+            response = self.llm._call_model_raw(prompt)
             
             # Save the learning log
             file_name = f"{self.output_dir}/learnings_{today_date}.md"

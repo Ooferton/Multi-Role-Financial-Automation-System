@@ -71,7 +71,7 @@ class WeeklyRuleUpdater:
 
         try:
             logger.info("Querying LLM Supervisor for new SOUL.md synthesis...")
-            new_soul = self.llm._call_gemini_raw(prompt)
+            new_soul = self.llm._call_model_raw(prompt)
             
             # Clean up potential markdown formatting wrapping the whole file
             if new_soul.startswith("```markdown\n"):

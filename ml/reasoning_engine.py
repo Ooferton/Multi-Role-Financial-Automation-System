@@ -30,9 +30,18 @@ class JournalEntry:
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_markdown(self):
+        import datetime
+        try:
+            from zoneinfo import ZoneInfo
+            tz = ZoneInfo("America/Los_Angeles")
+            dt = self.timestamp.replace(tzinfo=datetime.timezone.utc).astimezone(tz) if self.timestamp.tzinfo is None else self.timestamp.astimezone(tz)
+            time_str = dt.strftime('%Y-%m-%d %I:%M:%S %p %Z')
+        except Exception:
+            time_str = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+
         obs_str = "\n".join([f"- {o}" for o in self.observations])
         return (
-            f"### AI Journal Entry: {self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"### AI Journal Entry: {time_str}\n"
             f"**Market Sentiment:** {self.sentiment}\n"
             f"**Model Internal Mood:** {self.mood}\n\n"
             f"**Observations:**\n{obs_str}\n\n"

@@ -14,9 +14,9 @@ class MarketTick:
     price: float
     size: float
     timestamp: datetime
+    exchange: str
     bid_size: float = 0.0
     ask_size: float = 0.0
-    exchange: str
 
 @dataclass
 class OHLCV:

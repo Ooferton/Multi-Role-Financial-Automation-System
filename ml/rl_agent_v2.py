@@ -10,6 +10,7 @@ This provides richer market context for higher returns.
 Supports NVIDIA GPU acceleration via CUDA.
 """
 import sys
+import os
 import numpy as np
 import numpy
 
@@ -35,6 +36,12 @@ try:
     _SB3_AVAILABLE = True
 except ImportError:
     _SB3_AVAILABLE = False
+
+try:
+    from huggingface_hub import hf_hub_download, HfApi
+    _HF_HUB_AVAILABLE = True
+except ImportError:
+    _HF_HUB_AVAILABLE = False
 
 try:
     import torch
@@ -223,6 +230,54 @@ class TradingEnvironmentV2(_GymEnvBase):
         return self._get_obs(), reward, terminated, truncated, {"net_worth": new_total_value}
 
 
+class LiveReplayEnv(_GymEnvBase):
+    """
+    A specialized Gymnasium environment that replays a fixed set of real-world experiences
+    so that the PPO model can train on live data dynamically.
+    """
+    def __init__(self, experiences: list):
+        if _GYM_AVAILABLE:
+            super().__init__()
+            self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
+            # Obs dim must match RLAgentV2. Expecting 14~23 depending on V3 extensions
+            obs_dim = len(experiences[0]['obs']) if experiences else 14
+            self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(obs_dim,), dtype=np.float32)
+            
+        self.experiences = experiences
+        self.current_step = 0
+
+    def reset(self, seed=None, options=None):
+        if _GYM_AVAILABLE:
+            super().reset(seed=seed)
+        self.current_step = 0
+        if not self.experiences:
+            # Fallback zero obs if empty
+            obs = np.zeros(self.observation_space.shape, dtype=np.float32)
+            return obs, {} if _GYM_AVAILABLE else obs
+            
+        obs = np.array(self.experiences[0]['obs'], dtype=np.float32)
+        return obs, {} if _GYM_AVAILABLE else obs
+
+    def step(self, action):
+        if self.current_step >= len(self.experiences):
+            obs = np.zeros(self.observation_space.shape, dtype=np.float32)
+            return obs, 0.0, True, False, {}
+
+        # The reward is exactly what we logged from the real world outcome
+        reward = float(self.experiences[self.current_step]['reward'])
+        
+        self.current_step += 1
+        terminated = self.current_step >= len(self.experiences)
+        
+        if terminated:
+            next_obs = np.zeros(self.observation_space.shape, dtype=np.float32)
+        else:
+            next_obs = np.array(self.experiences[self.current_step]['obs'], dtype=np.float32)
+            
+        return next_obs, reward, terminated, False, {}
+
+
+
 class RLAgentV2:
     """
     PPO Trading Real v2 — Reinforcement Learning Agent with 10 market indicators.
@@ -236,6 +291,23 @@ class RLAgentV2:
         if _SB3_AVAILABLE:
             # Auto-detect GPU
             self.device = 'cuda' if (_TORCH_AVAILABLE and torch.cuda.is_available()) else 'cpu'
+            
+            hf_repo_id = os.environ.get("HF_MODEL_REPO_ID")
+            hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
+            
+            # --- HF Hub Download Attempt ---
+            if hf_repo_id and _HF_HUB_AVAILABLE and model_path and not (os.path.exists(model_path) or os.path.exists(model_path + ".zip")):
+                try:
+                    filename = os.path.basename(model_path) + ".zip"
+                    print(f"☁️ Downloading {filename} from HF Hub ({hf_repo_id})...")
+                    downloaded_path = hf_hub_download(repo_id=hf_repo_id, filename=filename, token=hf_token)
+                    import shutil
+                    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+                    shutil.copy(downloaded_path, model_path + ".zip")
+                    print(f"✅ Successfully downloaded {filename} to local cache.")
+                except Exception as e:
+                    print(f"⚠️ Could not download model from HF Hub: {e}")
+            # -------------------------------
             
             if model_path and (os.path.exists(model_path) or os.path.exists(model_path + ".zip")):
                 try:
@@ -269,6 +341,64 @@ class RLAgentV2:
         if self.model:
             self.model.learn(total_timesteps=total_timesteps, callback=callbacks)
 
+    def train_on_live_experiences(self, experiences: list, epochs: int = 1):
+        """
+        Triggers an online PPO micro-batch update using real-world trade outcomes.
+        """
+        if not self.model or getattr(self.model, 'env', None) is None:
+            print("Cannot train live: Model or base environment not loaded.")
+            return
+
+        if not experiences:
+            return
+
+        print(f"🧠 [LIVE LEARNING] Triggering PPO update on {len(experiences)} real-world trades over {epochs} epochs...")
+        
+        # 1. Store the original environment so we can restore it after
+        original_env = self.model.env
+        
+        # 2. Create the replay environment with our live buffer
+        replay_env = LiveReplayEnv(experiences)
+        
+        if _SB3_AVAILABLE:
+            from stable_baselines3.common.vec_env import DummyVecEnv
+            vec_env = DummyVecEnv([lambda: replay_env])
+            
+            # 3. Temporarily swap the model's environment
+            self.model.set_env(vec_env)
+            
+            # 4. Run the learning process (Timesteps = Epochs * Experiences)
+            timesteps = len(experiences) * epochs
+            try:
+                self.model.learn(total_timesteps=timesteps)
+                print(f"✅ [LIVE LEARNING] Successfully updated neural weights across {timesteps} steps.")
+            except Exception as e:
+                print(f"❌ [LIVE LEARNING] Training failed: {e}")
+            finally:
+                # 5. Restore the original environment to prevent state bleeding
+                self.model.set_env(original_env)
+
     def save(self, path: str):
         if self.model:
             self.model.save(path)
+            
+            # --- HF Hub Upload ---
+            if _HF_HUB_AVAILABLE:
+                hf_repo_id = os.environ.get("HF_MODEL_REPO_ID")
+                hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
+                
+                if hf_repo_id and hf_token:
+                    try:
+                        api = HfApi()
+                        filename = os.path.basename(path) + ".zip"
+                        print(f"☁️ Uploading {filename} back to HF Hub ({hf_repo_id})...")
+                        api.upload_file(
+                            path_or_fileobj=path + ".zip",
+                            path_in_repo=filename,
+                            repo_id=hf_repo_id,
+                            token=hf_token,
+                            commit_message="Live AI Training Update 🧠"
+                        )
+                        print("✅ HF Hub upload complete.")
+                    except Exception as e:
+                        print(f"❌ HF Hub upload failed: {e}")

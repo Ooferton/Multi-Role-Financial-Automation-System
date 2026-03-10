@@ -1,0 +1,11 @@
+{
+    "timestamp": "2026-02-28T20:28:05.670577",
+    "dynamic_targets": [
+        "TSLA",
+        "MSFT",
+        "SPY",
+        "QQQ",
+        "AAPL"
+    ],
+    "arbitrage_pair": {}
+}

@@ -13,6 +13,8 @@ from agents.alpaca_broker import AlpacaBroker
 from agents.coinbase_broker import CoinbaseBroker
 from strategies.rl_strategy_v2 import RLStrategyV2
 from strategies.swing import SwingStrategy
+from strategies.hft import HFTStrategy
+from strategies.day_trading import DayTradingStrategy
 from core.orchestrator import Orchestrator
 from data.feature_store import FeatureStore, MarketTick
 from agents.mock_broker import MockBroker
@@ -167,15 +169,31 @@ def main():
     # Feature Store (for logging history if needed)
     feature_store = FeatureStore(db_path="data/feature_store.db")
     
+    # --- TARGET UNIVERSE CONFIGURATION ---
+    # Default fallback symbols
     target_symbols_dict = {
-        "INDEX": ["SPY", "QQQ", "DIA", "IWM", "SQQQ", "UVXY"],
-        "TECH": ["AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "META", "GOOGL", "AVGO", "COST", "ORCL", "CRM", "ADBE", "PLTR", "RTX", "TSM", "MU", "CSCO", "INTC", "AMD", "IBM", "XLK", "XLC"],
-        "FINANCE": ["BAC", "JPM", "WFC", "C", "BLK", "GS", "MS", "AXP", "MA", "V", "XLF"],
-        "BONDS": ["TLT", "IEF", "IEI", "SHY", "BND", "AGG", "TIP"],
-        "INDUSTRIALS": ["CAT", "GE", "BA", "LMT", "NOC", "HON", "XOM", "CVX", "XLE", "XLI", "XLB"],
-        "CONSUMER": ["KO", "PEP", "MCD", "NKE", "SBUX", "HD", "LOW", "JNJ", "PFE", "UNH", "DIS", "XLY", "XLP", "XLV"],
-        "CRYPTO": ["BTC/USD", "ETH/USD", "IBIT", "BITO"]
+        "RESEARCH_PICKS": [], # Populated dynamically below
+        "INDEX": ["SPY", "QQQ", "DIA", "IWM"],
+        "TECH": ["AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "META", "GOOGL"],
+        "FINANCE": ["BAC", "JPM", "GS", "V", "XLF"],
+        "BONDS": ["TLT", "IEF", "BND"],
+        "CRYPTO": ["BTC/USD", "ETH/USD"]
     }
+
+    # Load Dynamic Targets from Autonomous Researcher
+    targets_path = "data/daily_targets.json"
+    if os.path.exists(targets_path):
+        try:
+            with open(targets_path, "r") as f:
+                daily_data = json.load(f)
+                dynamic_list = daily_data.get("dynamic_targets", [])
+                if dynamic_list:
+                    logger.info(f"🚀 Research Lab Injection: Using {len(dynamic_list)} high-conviction targets: {dynamic_list}")
+                    target_symbols_dict["RESEARCH_PICKS"] = dynamic_list
+                    # Optional: In strict research mode, we could clear other sectors
+                    # target_symbols_dict = {"RESEARCH_PICKS": dynamic_list}
+        except Exception as e:
+            logger.error(f"Failed to load dynamic targets: {e}")
     
     flat_symbols = [symbol for sector in target_symbols_dict.values() for symbol in sector]
     
@@ -263,6 +281,11 @@ def main():
                 
                 returns = pd.Series([b.close for b in bars]).pct_change().dropna()
                 sharpe = (returns.mean() / returns.std()) * np.sqrt(252) if returns.std() != 0 else 0.5
+                
+                # Apply high-conviction boost for Research Lab picks
+                if sector == "RESEARCH_PICKS":
+                    sharpe *= 1.25
+                    
                 allocations[sector] = max(0.1, sharpe) # Floor at 0.1
                 
             # Normalize allocations around 1.0 (mean)
@@ -281,40 +304,51 @@ def main():
     
     
     def load_active_strategies(target_swarm, regime='UNKNOWN'):
-        preset = "auto"
-        if os.path.exists(STRATEGY_CONFIG_PATH):
+        # 1. Read dashboard manual override
+        mode_path = "data/trading_mode.json"
+        trading_mode = "Auto / Dynamic"
+        if os.path.exists(mode_path):
             try:
-                with open(STRATEGY_CONFIG_PATH, "r") as f:
-                    config = json.load(f)
-                    preset = config.get("preset", "auto")
+                with open(mode_path, "r") as f:
+                    saved = json.load(f)
+                    trading_mode = saved.get("mode", "Auto / Dynamic")
             except: pass
             
-        if preset == "auto":
-            if regime == "BULL":
-                preset = "aggressive"
-            elif regime == "BEAR":
-                preset = "conservative" 
-            else:
-                preset = "conservative" # CHOPPY gets conservative
+        logger.info(f"⚙️ Active Trading Mode: {trading_mode} (Regime: {regime})")
         
-        logger.info(f"🧬 Loading Strategy Preset: {preset.upper()} (Regime: {regime})")
+        # Helper to safely load RL model
+        def get_rl_strat(sector):
+            model_path = "ml/models/ppo_v3_cyborg"
+            if not os.path.exists(model_path + ".zip") and not os.path.exists(model_path):
+                model_path = "ml/models/ppo_trading_real_v2"
+            
+            stripped_path = model_path.replace(".zip","")
+            logger.info(f"🧠 [{sector} Swarm] Loading RL Brain Model: {stripped_path}")
+            return RLStrategyV2(f"RL_{sector}", orchestrator.config, broker, stripped_path)
         
         for sector, agent in target_swarm.items():
             agent.clear_strategies()
             
-            # [Strategy 1] RL Brain (Always active in conservative/aggressive)
-            if preset in ["conservative", "aggressive"]:
-                model_path = "ml/models/ppo_v3_cyborg" # Try V3 First
-                if not os.path.exists(model_path + ".zip") and not os.path.exists(model_path):
-                    model_path = "ml/models/ppo_trading_real_v2" # Fallback to V2
+            # --- AUTO / DYNAMIC MODE (Regime-based) ---
+            if trading_mode == "Auto / Dynamic":
+                if regime in ["BULL"]:
+                    agent.add_strategy(get_rl_strat(sector))
+                    agent.add_strategy(SwingStrategy(f"Swing_{sector}", {"window_size": 24}, broker))
+                else: 
+                    agent.add_strategy(get_rl_strat(sector))
+            
+            # --- DAY TRADING OVERRIDE ---
+            elif trading_mode == "Day Trading":
+                agent.add_strategy(get_rl_strat(sector))
+                agent.add_strategy(DayTradingStrategy(f"DayTrade_{sector}", {"momentum": 1.005}))
                 
-                rl_strat = RLStrategyV2(f"RL_{sector}", orchestrator.config, broker, model_path.replace(".zip",""))
-                agent.add_strategy(rl_strat)
-
-            # [Strategy 2] Swing Trading (Aggressive only)
-            if preset in ["aggressive", "swing_only"]:
-                swing_strat = SwingStrategy(f"Swing_{sector}", {"window_size": 24}, broker)
-                agent.add_strategy(swing_strat)
+            # --- HFT OVERRIDE ---
+            elif trading_mode == "High Frequency Trading":
+                agent.add_strategy(HFTStrategy(f"HFT_{sector}", {"window_size": 50}, broker))
+                
+            # --- SWING OVERRIDE ---
+            elif trading_mode == "Swing Trading":
+                agent.add_strategy(SwingStrategy(f"Swing_{sector}", {"window_size": 24}, broker))
 
     # Initial Load
     current_regime, current_macro, _ = get_market_data_for_regime_and_parity("SPY")

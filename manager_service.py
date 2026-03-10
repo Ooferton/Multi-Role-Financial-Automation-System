@@ -1,12 +1,12 @@
 import time
-import subprocess
 import os
 import logging
 import json
+from core.llm_supervisor import LLMSupervisor
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - MANAGER - %(levelname)s - %(message)s')
-logger = logging.getLogger("OpenClawManager")
+logger = logging.getLogger("AutonomousManager")
 
 def run_management_cycle():
     logger.info("Starting Managerial Review Cycle...")
@@ -20,66 +20,60 @@ def run_management_cycle():
                 status_data = json.load(f)
         except: pass
 
-    veto_path = os.path.join(os.getcwd(), 'data', 'openclaw_veto.lock')
+    veto_path = os.path.join(os.getcwd(), 'data', 'system_veto.lock')
     veto_status = "ACTIVE" if os.path.exists(veto_path) else "INACTIVE"
 
-    # 2. Present to CEO (OpenClaw)
-    # Injecting system instruction directly into the message to bypass loading issues
-    mandate = (
-        "CRITICAL: You are the CEO and RISK MANAGER. NOT an AI assistant. DO NOT APOLOGIZE.\n"
-        "You have control of the trading system. MANDATORY DECISION REQUIRED.\n\n"
-    )
-    msg = (
-        f"CRITICAL: You are the CEO and RISK MANAGER. NOT an AI assistant. DO NOT APOLOGIZE. "
-        f"MANDATORY DECISION REQUIRED. "
-        f"STATUS: MODE={status_data.get('mode', 'UNKNOWN')}, VIX={status_data.get('vix', 'N/A')}, VIBE={status_data.get('vibe', 'N/A')}, VETO={veto_status}. "
-        f"OFFERED COMMANDS: 'COMMAND: VETO', 'COMMAND: RESUME', 'COMMAND: STATUS_QUO', 'COMMAND: SWITCH_STRATEGY [conservative|aggressive|hft_only]'. "
-        f"Choose based on the VIX (High VIX = VETO or Conservative, High Vibe = Aggressive). Reasoning first."
-    )
+    # 2. Present context to LLM Supervisor
+    context = {
+        "mode": status_data.get('mode', 'UNKNOWN'),
+        "vix": status_data.get('vix', 'N/A'),
+        "vibe": status_data.get('vibe', 'N/A'),
+        "veto_status": veto_status,
+        "macro_sentiment": status_data.get('vibe', 'NEUTRAL'),
+        "regime": status_data.get('mode', 'UNKNOWN'),
+        "daily_pnl": status_data.get('daily_pnl', 0),
+        "global_drawdown": status_data.get('drawdown', 0),
+        "current_constraints": {
+            "max_leverage": status_data.get('max_leverage', 2.0),
+            "max_position_size_pct": status_data.get('max_pos_pct', 0.15)
+        }
+    }
     
     try:
-        # Determine openclaw command based on OS
-        if os.name == 'nt':
-            openclaw_path = r"C:\Users\carst\AppData\Roaming\npm\openclaw.cmd"
-            if not os.path.exists(openclaw_path):
-                openclaw_path = "openclaw" # Fallback to path
-        else:
-            openclaw_path = "openclaw"
-            
-        cmd_str = f'"{openclaw_path}" agent --message "{msg}" --agent main --session-id CEO_REVIEW --thinking low'
+        supervisor = LLMSupervisor()
+        decision = supervisor.analyze_market_context(context)
         
-        # Capture output
-        res = subprocess.run(cmd_str, capture_output=True, text=True, timeout=60, shell=True)
-        response_text = (res.stdout + res.stderr).strip()
-        logger.info(f"CEO Turn Completed.")
-        
-        with open("logs/manager_decisions.log", "a", encoding="utf-8") as f:
-            f.write(f"--- {time.ctime()} ---\n{response_text}\n\n")
-
-        # 3. Execute Command (Fuzzy Match)
-        response_upper = response_text.upper()
-        if "COMMAND: VETO" in response_upper and veto_status == "INACTIVE":
-            logger.warning("CEO ORDERED VETO!")
-            subprocess.run(["python", "skills/sentience/scripts/veto.py", "halt"])
-        elif "COMMAND: RESUME" in response_upper and veto_status == "ACTIVE":
-            logger.info("CEO ORDERED RESUME!")
-            subprocess.run(["python", "skills/sentience/scripts/veto.py", "resume"])
-        elif "COMMAND: SWITCH_STRATEGY" in response_upper:
-            # Extract the preset
-            preset = "conservative"
-            if "AGGRESSIVE" in response_upper: preset = "aggressive"
-            elif "HFT_ONLY" in response_upper: preset = "hft_only"
+        if decision:
+            reasoning = decision.get("reasoning", "No reasoning provided.")
+            summary = decision.get("executive_summary", "")
+            emergency = decision.get("emergency_stop", False)
             
-            logger.warning(f"CEO ORDERED STRATEGY SWITCH TO: {preset.upper()}")
-            subprocess.run(["python", "skills/sentience/scripts/switch_strategy.py", preset])
+            logger.info(f"CEO Decision: {reasoning}")
+            
+            # Log decision
+            with open("logs/manager_decisions.log", "a", encoding="utf-8") as f:
+                f.write(f"--- {time.ctime()} ---\n")
+                f.write(f"Reasoning: {reasoning}\n")
+                f.write(f"Summary: {summary}\n")
+                f.write(f"Emergency Stop: {emergency}\n\n")
+            
+            # Execute emergency stop if needed
+            if emergency:
+                logger.warning("CEO ORDERED EMERGENCY STOP!")
+                with open(veto_path, "w") as f:
+                    f.write(f"Emergency stop ordered at {time.ctime()}")
+            elif os.path.exists(veto_path) and not emergency:
+                # If veto is active but CEO says resume
+                os.remove(veto_path)
+                logger.info("CEO cleared the emergency stop. Resuming operations.")
         else:
-            logger.info(f"CEO Action: {response_text[:100]}...")
+            logger.info("CEO cycle completed (LLM unavailable or returned no decision).")
 
     except Exception as e:
-        logger.error(f"Failed to trigger OpenClaw review: {e}")
+        logger.error(f"Failed to run management cycle: {e}")
 
 if __name__ == "__main__":
-    logger.info("OpenClaw Autonomous Manager Service STARTED (Interval: 5 minutes)")
+    logger.info("Autonomous Manager Service STARTED (Interval: 5 minutes)")
     while True:
         run_management_cycle()
         time.sleep(300)

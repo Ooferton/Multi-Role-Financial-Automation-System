@@ -87,6 +87,10 @@ class RiskManager:
 
         position_pct = trade_value / equity if equity > 0 else 0
         
+        # Micro-Account / Minimum Notional Overrides
+        is_crypto = "/" in symbol
+        min_trade_size = 10.50 if is_crypto else 1.50 # Safe buffer over broker minimums
+        
         # Crisis Sizing Overrides
         dynamic_long_cap = self.max_single_position_pct
         dynamic_short_cap = self.max_single_position_pct * 0.7 
@@ -124,16 +128,24 @@ class RiskManager:
         
         current_qty = portfolio.get('positions', {}).get(symbol, 0)
         
+        # Calculate nominal dollar limits, ensuring we at least allow the broker minimum
+        long_cap_dollars = max(equity * dynamic_long_cap, min_trade_size)
+        short_cap_dollars = max(equity * dynamic_short_cap, min_trade_size)
+        
+        # But NEVER exceed the actual total account equity
+        long_cap_dollars = min(long_cap_dollars, equity)
+        short_cap_dollars = min(short_cap_dollars, equity)
+        
         # Opening Logic
         if action == "BUY" and current_qty >= 0: # Opening/Adding to LONG
-            if position_pct > dynamic_long_cap:
-                new_qty = (equity * dynamic_long_cap) / price
-                return self._resized_response(symbol, quantity, new_qty, "LONG cap (Crisis-Adjusted)")
+            if trade_value > long_cap_dollars:
+                new_qty = long_cap_dollars / price
+                return self._resized_response(symbol, quantity, new_qty, "LONG cap (Micro/Crisis-Adjusted)")
         
         elif action == "SELL" and current_qty <= 0: # Opening/Adding to SHORT
-            if position_pct > dynamic_short_cap:
-                new_qty = (equity * dynamic_short_cap) / price
-                return self._resized_response(symbol, quantity, new_qty, "SHORT cap (Crisis-Adjusted)")
+            if trade_value > short_cap_dollars:
+                new_qty = short_cap_dollars / price
+                return self._resized_response(symbol, quantity, new_qty, "SHORT cap (Micro/Crisis-Adjusted)")
 
         return {"approved": True, "quantity": quantity, "reason": "Approved by RiskManager"}
 

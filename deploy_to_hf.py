@@ -16,6 +16,7 @@ def deploy(token, repo_id):
         "data/*.json",
         "data/*.csv",
         "logs/*",
+        "*.log",
         ".openclaw/*",
         "*.lock"
     ]
