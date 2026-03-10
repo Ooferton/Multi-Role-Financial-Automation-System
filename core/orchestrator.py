@@ -13,9 +13,12 @@ class Orchestrator:
     The Central Nervous System of the Financial Platform.
     Responsible for allocating capital, managing global state, and coordinating agents.
     """
-    def __init__(self, config_path: str):
+    def __init__(self, config_or_path):
         self.logger = logging.getLogger(__name__)
-        self.config = self._load_config(config_path)
+        if isinstance(config_or_path, dict):
+            self.config = config_or_path
+        else:
+            self.config = self._load_config(config_or_path)
         self.risk_manager = RiskManager(self.config)
         self.optimizer = SimpleRuleBasedOptimizer()
         self.broker: Optional[BrokerInterface] = None
@@ -25,6 +28,7 @@ class Orchestrator:
         self.capital_allocation = {}
         self.registered_agents: Dict[str, BaseAgent] = {}
         self.execution_log: List[Dict] = []
+        self.agents = [] # Maintain backward compat with set_agents()
 
     def _load_config(self, path: str) -> Dict:
         with open(path, 'r') as f:

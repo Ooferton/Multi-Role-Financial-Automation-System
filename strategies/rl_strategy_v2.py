@@ -46,7 +46,7 @@ class RLStrategyV2(TradingStrategy):
     9. ATR Normalized    - Volatility (NEW)
     10. OBV Normalized   - Volume (NEW)
     """
-    def __init__(self, name: str, config: Dict[str, Any], broker: BrokerInterface, model_path: str):
+    def __init__(self, name: str, config: Dict[str, Any], broker: BrokerInterface, model_path: str = "ml/models/ppo_v3_cyborg"):
         super().__init__(name, config)
         self.broker = broker
         self.agent = RLAgentV2(model_path)
