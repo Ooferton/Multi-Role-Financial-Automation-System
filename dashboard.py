@@ -140,6 +140,19 @@ def load_swarm_status():
 
 def get_v3_model_info():
     p = "ml/models/ppo_v3_cyborg.zip"
+    if not os.path.exists(p):
+        # Attempt to pull from Hugging Face Hub (Phase 23 persistence)
+        hf_repo = os.environ.get("HF_MODEL_REPO_ID")
+        hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
+        if hf_repo and hf_token:
+            try:
+                from huggingface_hub import hf_hub_download
+                import shutil
+                downloaded = hf_hub_download(repo_id=hf_repo, filename="ppo_v3_cyborg.zip", token=hf_token)
+                os.makedirs("ml/models", exist_ok=True)
+                shutil.copy(downloaded, p)
+            except Exception:
+                pass
     if os.path.exists(p):
         mb = os.path.getsize(p)/(1024*1024)
         ts = datetime.fromtimestamp(os.path.getmtime(p)).strftime("%m/%d %H:%M")
